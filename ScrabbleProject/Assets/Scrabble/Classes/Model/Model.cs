@@ -220,21 +220,22 @@ namespace Model
 
 		public static TileType[,] m_boardMap = new TileType[15, 15]
 		{
-			{ TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.TW },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DL },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.TW },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DL },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.TW },
+//														  4			   3								 ///////////       1			2			3			  4
+			{ TileType.TW, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.TW },
+			{ TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK },
+			{ TileType.DL, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.DL },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK },
+			{ TileType.TW, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.TW },
+			{ TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.DL, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.DL },
+			{ TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK },
+			{ TileType.TW, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.TW },
 		};
 
 		public int LetterPoints (Letter p_letter)
