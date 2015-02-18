@@ -96,6 +96,14 @@ namespace Model
 
 	public sealed class BOARD
 	{
+		public static readonly int TILE_COUNT = 225;
+		public static readonly int BOARD_ROWS = 15;
+		public static readonly int BOARD_COLS = 15;
+		public static readonly float TILE_WIDTH = 50f; // in pixel
+		public static readonly float TILE_HEIGHT = 50f;
+		public static readonly float TILE_OFFSET = 0.5f; // in unity world
+		public static readonly float TILE_SCREEN_OFFSET = ((float)BOARD_ROWS * TILE_OFFSET) * 0.2f;
+
 		private Dictionary<Letter, int> m_letterPoints = new Dictionary<Letter, int>()
 		{
 			// 1 pt
@@ -188,7 +196,7 @@ namespace Model
 			{ Letter.Blank, 		2 },
 		};
 
-		public Dictionary<TileType, int> m_tileCount = new Dictionary<TileType, int>()
+		private Dictionary<TileType, int> m_tileCount = new Dictionary<TileType, int>()
 		{
 			{ TileType.BK, 		198 },
 			{ TileType.TW, 		8 },
@@ -198,7 +206,7 @@ namespace Model
 			{ TileType.ST, 		1 },
 		};
 
-		public Dictionary<TileType, string> m_tileSprite = new Dictionary<TileType, string>()
+		private Dictionary<TileType, string> m_tileSprite = new Dictionary<TileType, string>()
 		{
 			{ TileType.BK, 		"tile_empty" },
 			{ TileType.TW, 		"tile_TW" },
@@ -207,6 +215,8 @@ namespace Model
 			{ TileType.DL, 		"tile_DL" },
 			{ TileType.ST, 		"tile_DW" },
 		};
+
+
 
 		public int LetterPoints (Letter p_letter)
 		{
