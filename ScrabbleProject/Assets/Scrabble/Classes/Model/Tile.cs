@@ -16,6 +16,10 @@ namespace Board
 		{
 			this.Assert<tk2dSlicedSprite>(m_skin, "m_skin must never be null!");
 			m_model = Model.Instance;
+		}
+
+		private void Start ()
+		{
 			this.UpdateTile(m_type);
 			this.UpdateSkin();
 		}
@@ -37,6 +41,12 @@ namespace Board
 			if (m_type == p_type) { return; }
 			m_type = p_type;
 			this.UpdateSkin();
+		}
+
+		public void PreloadSkin (TileType p_type)
+		{
+			this.Assert(p_type != TileType.Invalid, "m_type is Invalid!");
+			m_type = p_type;
 		}
 
 		private void UpdateSkin ()

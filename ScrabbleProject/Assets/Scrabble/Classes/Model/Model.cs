@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace Model
 {
+	using Ext;
+
 	[FlagsAttribute]
 	public enum Letter
 	{
@@ -216,7 +218,24 @@ namespace Model
 			{ TileType.ST, 		"tile_DW" },
 		};
 
-
+		public static TileType[,] m_boardMap = new TileType[15, 15]
+		{
+			{ TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.TW },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DL },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.TW },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DL },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
+			{ TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.TW },
+		};
 
 		public int LetterPoints (Letter p_letter)
 		{
@@ -236,6 +255,14 @@ namespace Model
 		public string TileSprite (TileType p_tile)
 		{
 			return m_tileSprite[p_tile];
+		}
+
+		public TileType[,] Map { get { return m_boardMap; } }
+
+		public TileType MapFrom (int p_row, int p_col)
+		{
+			//this.Log(Tags.Log, "BOARD::MapFrom row:{0} col:{1}", p_row, p_col);
+			return m_boardMap[p_row, p_col];
 		}
 	}
 }

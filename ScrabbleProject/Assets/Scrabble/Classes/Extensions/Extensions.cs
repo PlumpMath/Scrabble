@@ -26,7 +26,7 @@ namespace Ext
 			if (p_tag == Tags.Invalid) { return; }
 			if (!tags.Has(p_tag)) { return; }
 			string logs = string.Format(p_format, p_args);
-			Debug.Log(string.Format("<color=yellow>[{0}]</color> {1}\n", logs));
+			Debug.Log(string.Format("<color=yellow>[Log]</color> {0}\n", logs));
 		}
 
 		public static void LogWarn<T> (this T p_self, Tags p_tag, string p_format, params object[] p_args)
@@ -34,7 +34,7 @@ namespace Ext
 			if (p_tag == Tags.Invalid) { return; }
 			if (!tags.Has(p_tag)) { return; }
 			string logs = string.Format(p_format, p_args);
-			Debug.Log(string.Format("<color=green>[{0}]</green> {1}\n", logs));
+			Debug.Log(string.Format("<color=green>[Warn]</green> {0}\n", logs));
 		}
 
 		public static void LogError<T> (this T p_self, Tags p_tag, string p_format, params object[] p_args)
@@ -42,7 +42,7 @@ namespace Ext
 			if (p_tag == Tags.Invalid) { return; }
 			if (!tags.Has(p_tag)) { return; }
 			string logs = string.Format(p_format, p_args);
-			Debug.Log(string.Format("<color=red>[{0}]</color> {1}\n", logs));
+			Debug.Log(string.Format("<color=red>[Error]</color> {0}\n", logs));
 		}
 
         #region INTEGER EXTENSION

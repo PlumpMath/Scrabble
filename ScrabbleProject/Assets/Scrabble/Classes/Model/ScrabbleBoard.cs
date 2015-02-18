@@ -29,9 +29,9 @@ namespace Board
 			// show peg
 			m_tile.gameObject.SetActive(true);
 
-			for (int row = 0; row <= BOARD.BOARD_ROWS; row++)
+			for (int row = 0; row < BOARD.BOARD_ROWS; row++)
 			{
-				for (int col = 0; col <= BOARD.BOARD_COLS; col++)
+				for (int col = 0; col < BOARD.BOARD_COLS; col++)
 				{
 					Tile tile = this.CreateTile(m_tile, TileType.BK);
 					tile.name = "Tile_" + col + "_" + row;
@@ -40,6 +40,9 @@ namespace Board
 					position.x = (col * BOARD.TILE_OFFSET);// - BOARD.TILE_SCREEN_OFFSET;
 					position.y = (row * BOARD.TILE_OFFSET);// - BOARD.TILE_SCREEN_OFFSET;
 					tile.transform.position = position;
+
+					// preload skin
+					tile.PreloadSkin(m_model.Board.MapFrom(row, col));
 				}
 			}
 
