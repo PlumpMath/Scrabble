@@ -1,0 +1,39 @@
+# =============== #
+# Unity generated #
+# =============== #
+ScrabbleProject/Temp/
+ScrabbleProject/Obj/
+ScrabbleProject/UnityGenerated/
+ScrabbleProject/Library/
+
+# ==================== #
+# 2D Toolkit generated #
+# ==================== #
+ScrabbleProject/Assets/-tk2d
+ScrabbleProject/Assets/Scrabble/tk2d/*
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
