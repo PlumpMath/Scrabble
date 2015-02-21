@@ -19,6 +19,14 @@ namespace Events
 		/// 	Tile	- Tile
 		/// </summary>
 		OnDrop		= 0x1 << 0,
+
+		/// <summary>
+		/// A letter is successfully dropped on a tile, so snap it!
+		/// Snap Data:
+		/// 	- Tile
+		/// 	- Letter
+		/// </summary>
+		OnSnapped	= 0x1 << 1,
 	}; 
 
 	public class ScrabbleEvent
@@ -38,6 +46,7 @@ namespace Events
 			}
 		}
 
+		//private Dictionary<object, Dictionary<EEvents, bool>> m_registeredEvents;
 		public Action<EEvents, IEventData> OnTriggerEvent;
 
 		public void Trigger (EEvents p_event, IEventData p_eventData)

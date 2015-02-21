@@ -99,7 +99,8 @@ namespace Board
 							snapped = true;
 							
 							// TODO: Trigger Snapping
-
+							ScrabbleEvent.Instance.Trigger(EEvents.OnSnapped, new SnapEvent(tile, letter));
+							
 							// TODO: Trigger active neighbor tiles!
 
 							break;
