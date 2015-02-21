@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace Board
 {
 	using Ext;
+	using Events;
 	using Model;
 
 	public class ScrabbleBoard : MonoBehaviour 
@@ -23,10 +24,14 @@ namespace Board
 
 			this.InitializeBoard();
 			this.InitializeActiveTiles();
+
+			// initialize event
+			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}
 		
 		private void OnDestroy ()
 		{
+			ScrabbleEvent.Instance.OnTriggerEvent -= this.OnEventListened;
 		}
 
 		private void InitializeBoard ()
@@ -65,6 +70,22 @@ namespace Board
 		private void InitializeActiveTiles ()
 		{
 			m_tiles[m_model.Default.Row, m_model.Default.Col].Activate();
+		}
+
+		private void OnEventListened (EEvents p_type, IEventData p_data)
+		{
+			switch (p_type)
+			{
+				case EEvents.OnDrop:
+				{
+					DropEvent drop = (DropEvent)p_data;
+					Vector3 pos = drop.Data<Vector3>(DropEvent.POSITION);
+					Letter letter = drop.Data<Letter>(DropEvent.LETTER);
+
+					this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
+				}
+				break;
+			}
 		}
 	}
 }

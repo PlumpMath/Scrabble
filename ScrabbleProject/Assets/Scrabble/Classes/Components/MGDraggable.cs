@@ -4,6 +4,8 @@ using System.Collections;
 
 namespace MGTools
 {
+	using Board;
+	using Events;
 	using Ext;
 
 	[RequireComponent(typeof(BoxCollider2D))]
@@ -12,6 +14,10 @@ namespace MGTools
 		private Vector3 m_screenPoint;
 		private Vector3 m_offset;
 		private Vector3 m_rackos;
+
+		private void Awake ()
+		{
+		}
 
 		private void OnMouseDown ()
 		{
@@ -30,9 +36,13 @@ namespace MGTools
 
 		private void OnMouseUp ()
 		{
-			this.Log(Tags.Log, "Draggable::OnMouseUp pos:{0}", this.transform.position);
+			//this.Log(Tags.Log, "Draggable::OnMouseUp pos:{0}", this.transform.position);
+
+			// trigger event
+			ScrabbleEvent.Instance.Trigger(EEvents.OnDrop, new DropEvent(this.transform.position, this.GetComponent<Letter>()));
+
 			// TODO: Check for valid position
-			this.transform.position = m_rackos;
+			//this.transform.position = m_rackos;
 		}
 	}
 }
