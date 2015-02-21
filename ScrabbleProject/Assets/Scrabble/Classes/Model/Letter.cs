@@ -10,11 +10,15 @@ namespace Board
 	{
 		[SerializeField] private ELetter m_letter;
 		[SerializeField] private tk2dSlicedSprite m_skin; 
+		[SerializeField] private tk2dTextMesh m_txtText;
+		[SerializeField] private tk2dTextMesh m_txtPoints;
 		private Model m_model;
 
 		private void Awake ()
 		{
 			this.Assert<tk2dSlicedSprite>(m_skin, "m_skin must never be null!");
+			this.Assert<tk2dTextMesh>(m_txtText, "m_txtText must never be null!");
+			this.Assert<tk2dTextMesh>(m_txtPoints, "m_txtPoints must never be null!");
 			m_model = Model.Instance;
 		}
 		
@@ -53,6 +57,8 @@ namespace Board
 		{
 			if (m_letter == ELetter.Invalid) { return; }
 			//m_skin.spriteId = m_skin.GetSpriteIdByName(m_model.Board.TileSprite(m_letter));
+			m_txtText.text = m_model.Board.LetterText(m_letter);
+			m_txtPoints.text = "" + m_model.Board.LetterPoints(m_letter);
 		}
 	}
 }

@@ -101,10 +101,59 @@ namespace Model
 		public static readonly int TILE_COUNT = 225;
 		public static readonly int BOARD_ROWS = 15;
 		public static readonly int BOARD_COLS = 15;
+		public static readonly float PIXEL_IN_METER = 200f;
 		public static readonly float TILE_WIDTH = 50f; // in pixel
 		public static readonly float TILE_HEIGHT = 50f;
 		public static readonly float TILE_OFFSET = 0.5f; // in unity world
 		public static readonly float TILE_SCREEN_OFFSET = 7f * 0.5f;//((float)BOARD_ROWS * TILE_OFFSET) * 0.2f;
+		public static readonly float LETTER_WITH = 100.0f;
+		public static readonly float LETTER_HEIGHT = 100.0f;
+
+		private Dictionary<ELetter, string> m_letterText = new Dictionary<ELetter, string>()
+		{
+			// 1 pt
+			{ ELetter.E, 			"E" },
+			{ ELetter.A, 			"A" },
+			{ ELetter.I, 			"I" },
+			{ ELetter.O, 			"O" },
+			{ ELetter.N, 			"N" },
+			{ ELetter.R, 			"R" },
+			{ ELetter.T, 			"T" },
+			{ ELetter.L, 			"L" },
+			{ ELetter.S, 			"S" },
+			{ ELetter.U, 			"U" },
+			
+			// 2 pt   
+			{ ELetter.D, 			"D" },
+			{ ELetter.G, 			"G" },
+			
+			// 3 pt   
+			{ ELetter.B, 			"B" },
+			{ ELetter.C, 			"C" },
+			{ ELetter.M, 			"M" },
+			{ ELetter.P, 			"P" },
+			
+			// 4 pt   
+			{ ELetter.F, 			"F" },
+			{ ELetter.H, 			"H" },
+			{ ELetter.V, 			"V" },
+			{ ELetter.W, 			"W" },
+			{ ELetter.Y, 			"Y" },
+			
+			// 5 pt   
+			{ ELetter.K, 			"K" },
+			
+			// 8 pt   
+			{ ELetter.J, 			"J" },
+			{ ELetter.X, 			"X" },
+			
+			// 10 pt  
+			{ ELetter.Q, 			"Q" },
+			{ ELetter.Z, 			"Z" },
+			
+			// 0 pt
+			{ ELetter.Blank, 		"" },
+		};
 
 		private Dictionary<ELetter, int> m_letterPoints = new Dictionary<ELetter, int>()
 		{
@@ -245,6 +294,11 @@ namespace Model
 		public int LetterCount (ELetter p_letter)
 		{
 			return m_letterCount[p_letter];
+		}
+
+		public string LetterText (ELetter p_letter)
+		{
+			return m_letterText[p_letter];
 		}
 
 		public int TileCount (ETileType p_tile)
