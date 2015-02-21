@@ -36,9 +36,10 @@ namespace Board
 					Tile tile = this.CreateTile(m_tile, TileType.BK);
 					tile.name = "Tile_" + col + "_" + row;
 					tile.transform.parent = this.transform;
+
 					Vector3 position = m_tile.transform.position;
-					position.x = (col * BOARD.TILE_OFFSET);// - BOARD.TILE_SCREEN_OFFSET;
-					position.y = (row * BOARD.TILE_OFFSET);// - BOARD.TILE_SCREEN_OFFSET;
+					position.x = (col * BOARD.TILE_OFFSET) - BOARD.TILE_SCREEN_OFFSET;
+					position.y = (row * BOARD.TILE_OFFSET) - BOARD.TILE_SCREEN_OFFSET;
 					tile.transform.position = position;
 
 					// preload skin

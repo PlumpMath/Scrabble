@@ -104,7 +104,7 @@ namespace Model
 		public static readonly float TILE_WIDTH = 50f; // in pixel
 		public static readonly float TILE_HEIGHT = 50f;
 		public static readonly float TILE_OFFSET = 0.5f; // in unity world
-		public static readonly float TILE_SCREEN_OFFSET = ((float)BOARD_ROWS * TILE_OFFSET) * 0.2f;
+		public static readonly float TILE_SCREEN_OFFSET = 7f * 0.5f;//((float)BOARD_ROWS * TILE_OFFSET) * 0.2f;
 
 		private Dictionary<Letter, int> m_letterPoints = new Dictionary<Letter, int>()
 		{
@@ -220,7 +220,6 @@ namespace Model
 
 		public static TileType[,] m_boardMap = new TileType[15, 15]
 		{
-//														  4			   3								 ///////////       1			2			3			  4
 			{ TileType.TW, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.TW },
 			{ TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK },
 			{ TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK },
