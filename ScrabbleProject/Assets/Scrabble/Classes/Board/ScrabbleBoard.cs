@@ -97,6 +97,11 @@ namespace Board
 						{
 							this.Log(Tags.Log, "Snap!");
 							snapped = true;
+							
+							// TODO: Trigger Snapping
+
+							// TODO: Trigger active neighbor tiles!
+
 							break;
 						}
 					}
