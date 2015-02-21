@@ -101,13 +101,16 @@ namespace Model
 		public static readonly int TILE_COUNT = 225;
 		public static readonly int BOARD_ROWS = 15;
 		public static readonly int BOARD_COLS = 15;
-		public static readonly float PIXEL_IN_METER = 200f;
+		public static readonly float PIXEL_IN_METER = 100f;
 		public static readonly float TILE_WIDTH = 50f; // in pixel
 		public static readonly float TILE_HEIGHT = 50f;
-		public static readonly float TILE_OFFSET = 0.5f; // in unity world
-		public static readonly float TILE_SCREEN_OFFSET = 7f * 0.5f;//((float)BOARD_ROWS * TILE_OFFSET) * 0.2f;
-		public static readonly float LETTER_WITH = 100.0f;
+		public static readonly float TILE_OFFSET = TILE_WIDTH / PIXEL_IN_METER;
+		//public static readonly float TILE_OFFSET = 0.5f; // in unity world
+		//public static readonly float TILE_SCREEN_OFFSET = (((float)BOARD_COLS * TILE_WIDTH) / PIXEL_IN_METER) * 0.5f - TILE_OFFSET;
+		public static readonly float TILE_SCREEN_OFFSET = 7f * 0.5f;
+		public static readonly float LETTER_WIDTH = 100.0f;
 		public static readonly float LETTER_HEIGHT = 100.0f;
+		public static readonly float LETTER_OFFSET = LETTER_WIDTH / PIXEL_IN_METER;
 
 		private Dictionary<ELetter, string> m_letterText = new Dictionary<ELetter, string>()
 		{

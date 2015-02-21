@@ -23,6 +23,9 @@ namespace Board
 			this.AddLetter(ELetter.A);
 			this.AddLetter(ELetter.B);
 			this.AddLetter(ELetter.D);
+			this.AddLetter(ELetter.E);
+			this.AddLetter(ELetter.F);
+			this.AddLetter(ELetter.G);
 		}
 
 		public void AddLetter (ELetter p_letter)
@@ -37,13 +40,7 @@ namespace Board
 
 			// update letter view
 			letter.PreloadSkin(p_letter);
-
-			if (m_letterViews.Count > 0)
-			{
-				float newX = m_letterViews[m_letterViews.Count - 1].transform.position.x + 1f;
-				letter.transform.SetX(newX);
-			}
-
+			
 			m_letterViews.Add(letter);
 			this.AdjustPosition();
 		}
@@ -63,13 +60,28 @@ namespace Board
 
 		private void AdjustPosition ()
 		{
+			// fixe init pos
+			for (int i = 0; i < m_letterViews.Count; i++)
+			{
+				float newX = m_letter.transform.position.x + (BOARD.LETTER_OFFSET * (float)i);
+				m_letterViews[i].transform.SetX(newX);
+			}
+
 			if (m_letterViews.Count > 1)
 			{
-				float distance = m_letterViews[m_letterViews.Count - 1].transform.position.x - m_letterViews[0].transform.position.x;
+				Vector3 head = m_letterViews[m_letterViews.Count - 1].transform.position;
+				head.y = 0;
+				head.z = 0;
+				Vector3 tail = m_letterViews[0].transform.position;
+				tail.y = 0;
+				tail.z = 0;
 
+				float distance = Vector3.Distance(head, tail);
+				float computedDist = distance * 0.5f;
+				
 				foreach (Letter letter in m_letterViews)
 				{
-					float newX = letter.transform.position.x - (distance * 0.25f);
+					float newX = letter.transform.position.x - computedDist;
 					letter.transform.SetX(newX);
 				}
 			}
