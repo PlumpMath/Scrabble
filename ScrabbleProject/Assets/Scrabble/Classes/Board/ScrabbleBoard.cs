@@ -11,13 +11,18 @@ namespace Board
 	public class ScrabbleBoard : MonoBehaviour 
 	{
 		[SerializeField] private Tile m_tile;
+		[SerializeField] private Tile[,] m_tiles;
 		private Model m_model;
 
 		private void Awake ()
 		{
 			this.Assert<Tile>(m_tile, "m_tile must never be null!");
+
 			m_model = Model.Instance;
+			m_tiles = new Tile[BOARD.BOARD_ROWS, BOARD.BOARD_COLS];
+
 			this.InitializeBoard();
+			this.InitializeActiveTiles();
 		}
 		
 		private void OnDestroy ()
@@ -35,7 +40,7 @@ namespace Board
 				{
 					// generate tile
 					Tile tile = this.CreateBoardTile(m_tile, ETileType.BK);
-					tile.name = "Tile_" + col + "_" + row;
+					tile.name = "Tile_" + row + "_" + col;
 					tile.transform.parent = this.transform;
 
 					// adjust position
@@ -45,12 +50,21 @@ namespace Board
 					tile.transform.position = position;
 
 					// preload skin
-					tile.PreloadSkin(m_model.Board.MapFrom(row, col));
+					ETileType type = m_model.Board.MapFrom(row, col);
+					tile.PreloadSkin(type, row, col);
+
+					// set tile
+					m_tiles[row, col] = tile;
 				}
 			}
 
 			// hide peg
 			m_tile.gameObject.SetActive(false);
+		}
+
+		private void InitializeActiveTiles ()
+		{
+			m_tiles[m_model.Default.Row, m_model.Default.Col].Activate();
 		}
 	}
 }

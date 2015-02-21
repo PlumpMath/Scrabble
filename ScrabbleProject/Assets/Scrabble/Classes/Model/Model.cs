@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
+	using Board;
 	using Ext;
 
 	[FlagsAttribute]
@@ -91,9 +92,26 @@ namespace Model
 		public Model ()
 		{
 			this.Board = new BOARD();
+
+			TileModel start = new TileModel();
+			start.Row = BOARD.START_TILE_ROW;
+			start.Col = BOARD.START_TILE_COL;
+			start.IsActive = false;
+			start.Tile = null;
+			this.Default = start;
 		}
 
 		public BOARD Board { get; private set; }
+		public TileModel Default { get; private set; }
+	}
+
+	[Serializable]
+	public struct TileModel 
+	{
+		public int Row;
+		public int Col;
+		public bool IsActive;
+		public Tile Tile;
 	}
 
 	public sealed class BOARD
@@ -111,6 +129,8 @@ namespace Model
 		public static readonly float LETTER_WIDTH = 100.0f;
 		public static readonly float LETTER_HEIGHT = 100.0f;
 		public static readonly float LETTER_OFFSET = LETTER_WIDTH / PIXEL_IN_METER;
+		public static readonly int START_TILE_ROW = 7;
+		public static readonly int START_TILE_COL = 7;
 
 		private Dictionary<ELetter, string> m_letterText = new Dictionary<ELetter, string>()
 		{
