@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace Board
 {
 	using Ext;
 	using Model;
 
-	public class Tile : MonoBehaviour 
+	public class Tile : MonoBehaviour
 	{
 		[SerializeField] private ETileType m_type;
 		[SerializeField] private tk2dSlicedSprite m_skin; 
@@ -52,6 +53,8 @@ namespace Board
 			private set { m_tileModel = value; }
 		}
 
+		public Rect Rect { get; private set; }
+
 		public ETileType Type
 		{ 
 			get { return m_type; } 
@@ -78,6 +81,15 @@ namespace Board
 			model.Row = p_row;
 			model.Col = p_col;
 			this.TileModel = model;
+
+			// generate rect
+			float offset = BOARD.TILE_OFFSET;
+			Vector2 pos = this.transform.position;
+			Rect rect = new Rect(pos.x - offset,
+			                     pos.y - offset,
+			                     pos.x + offset,
+			                     pos.y + offset);
+			this.Rect = rect;
 		}
 
 		public void Activate ()

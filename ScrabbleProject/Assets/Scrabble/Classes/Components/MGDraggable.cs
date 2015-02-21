@@ -36,13 +36,8 @@ namespace MGTools
 
 		private void OnMouseUp ()
 		{
-			//this.Log(Tags.Log, "Draggable::OnMouseUp pos:{0}", this.transform.position);
-
 			// trigger event
 			ScrabbleEvent.Instance.Trigger(EEvents.OnDrop, new DropEvent(this.transform.position, this.GetComponent<Letter>()));
-
-			// TODO: Check for valid position
-			//this.transform.position = m_rackos;
 		}
 	}
 }

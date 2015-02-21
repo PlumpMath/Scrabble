@@ -12,6 +12,7 @@ namespace Board
 		[SerializeField] private tk2dSlicedSprite m_skin; 
 		[SerializeField] private tk2dTextMesh m_txtText;
 		[SerializeField] private tk2dTextMesh m_txtPoints;
+		[SerializeField] private Vector3 m_originalPos;
 		private Model m_model;
 
 		private void Awake ()
@@ -51,6 +52,19 @@ namespace Board
 		{
 			this.Assert(p_type != ELetter.Invalid, "m_letter is Invalid!");
 			m_letter = p_type;
+		}
+
+		public void Ready ()
+		{
+			m_originalPos = this.transform.position;
+		}
+
+		/// <summary>
+		/// Dragging is unsuccessful
+		/// </summary>
+		public void Reset ()
+		{
+			this.transform.position = m_originalPos;
 		}
 		
 		private void UpdateSkin ()

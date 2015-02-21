@@ -12,7 +12,8 @@ namespace Board
 	public class ScrabbleBoard : MonoBehaviour 
 	{
 		[SerializeField] private Tile m_tile;
-		[SerializeField] private Tile[,] m_tiles;
+		[SerializeField] private Tile[,] m_tileGrid;
+		private List<Tile> m_tiles;
 		private Model m_model;
 
 		private void Awake ()
@@ -20,7 +21,8 @@ namespace Board
 			this.Assert<Tile>(m_tile, "m_tile must never be null!");
 
 			m_model = Model.Instance;
-			m_tiles = new Tile[BOARD.BOARD_ROWS, BOARD.BOARD_COLS];
+			m_tileGrid = new Tile[BOARD.BOARD_ROWS, BOARD.BOARD_COLS];
+			m_tiles = new List<Tile>();
 
 			this.InitializeBoard();
 			this.InitializeActiveTiles();
@@ -59,7 +61,8 @@ namespace Board
 					tile.PreloadSkin(type, row, col);
 
 					// set tile
-					m_tiles[row, col] = tile;
+					m_tileGrid[row, col] = tile;
+					m_tiles.Add(tile);
 				}
 			}
 
@@ -69,7 +72,7 @@ namespace Board
 
 		private void InitializeActiveTiles ()
 		{
-			m_tiles[m_model.Default.Row, m_model.Default.Col].Activate();
+			m_tileGrid[m_model.Default.Row, m_model.Default.Col].Activate();
 		}
 
 		private void OnEventListened (EEvents p_type, IEventData p_data)
@@ -83,6 +86,25 @@ namespace Board
 					Letter letter = drop.Data<Letter>(DropEvent.LETTER);
 
 					this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
+					
+					Predicate<Tile> filter = (Tile tile) => { return tile.IsActive; };
+					List<Tile> activeTiles = m_tiles.FindAll(filter);
+					bool snapped = false;
+
+					foreach (Tile tile in activeTiles)
+					{
+						if (tile.Rect.Contains(pos))
+						{
+							this.Log(Tags.Log, "Snap!");
+							snapped = true;
+							break;
+						}
+					}
+
+					if (!snapped)
+					{
+						letter.Reset();
+					}
 				}
 				break;
 			}
