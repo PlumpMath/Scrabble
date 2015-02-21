@@ -29,6 +29,13 @@ namespace Board
 			this.Type = ETileType.Invalid;
 		}
 
+		/// <summary>
+		/// True: You can place a letter on it
+		/// </summary>
+		public bool IsActive { get; private set; }
+
+		// TODO: Add letter here
+
 		public ETileType Type
 		{ 
 			get { return m_type; } 
