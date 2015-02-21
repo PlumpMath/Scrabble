@@ -8,7 +8,7 @@ namespace Board
 
 	public class Tile : MonoBehaviour 
 	{
-		[SerializeField] private TileType m_type;
+		[SerializeField] private ETileType m_type;
 		[SerializeField] private tk2dSlicedSprite m_skin; 
 		private Model m_model;
 
@@ -26,32 +26,32 @@ namespace Board
 
 		private void OnDestroy ()
 		{
-			this.Type = TileType.Invalid;
+			this.Type = ETileType.Invalid;
 		}
 
-		public TileType Type
+		public ETileType Type
 		{ 
 			get { return m_type; } 
 			private set { m_type = value; }
 		}
 
-		public void UpdateTile (TileType p_type)
+		public void UpdateTile (ETileType p_type)
 		{
-			this.Assert(p_type != TileType.Invalid, "m_type is Invalid!");
+			this.Assert(p_type != ETileType.Invalid, "m_type is Invalid!");
 			if (m_type == p_type) { return; }
 			m_type = p_type;
 			this.UpdateSkin();
 		}
 
-		public void PreloadSkin (TileType p_type)
+		public void PreloadSkin (ETileType p_type)
 		{
-			this.Assert(p_type != TileType.Invalid, "m_type is Invalid!");
+			this.Assert(p_type != ETileType.Invalid, "m_type is Invalid!");
 			m_type = p_type;
 		}
 
 		private void UpdateSkin ()
 		{
-			if (m_type == TileType.Invalid) { return; }
+			if (m_type == ETileType.Invalid) { return; }
 			m_skin.spriteId = m_skin.GetSpriteIdByName(m_model.Board.TileSprite(m_type));
 		}
 	}

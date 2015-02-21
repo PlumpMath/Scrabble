@@ -207,10 +207,16 @@ namespace Ext
         #endregion
 
 		#region SCRABBLE EXTENSION
-		public static Tile CreateBoardTile (this MonoBehaviour p_self, Tile p_peg, TileType p_type)			         
+		public static Tile CreateBoardTile (this MonoBehaviour p_self, Tile p_peg, ETileType p_type)			         
 		{
 			GameObject tile = (GameObject)GameObject.Instantiate(p_peg.gameObject);
 			return tile.GetComponent<Tile>();
+		}
+
+		public static Letter CreateBoardLetter (this MonoBehaviour p_self, Letter p_peg, ELetter p_type)	
+		{
+			GameObject letter = (GameObject)GameObject.Instantiate(p_peg.gameObject);
+			return letter.GetComponent<Letter>();
 		}
 		#endregion
     }

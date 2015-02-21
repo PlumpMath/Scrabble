@@ -8,7 +8,7 @@ namespace Model
 	using Ext;
 
 	[FlagsAttribute]
-	public enum Letter
+	public enum ELetter
 	{
 		Invalid		= 0x0,
 
@@ -58,7 +58,7 @@ namespace Model
 	};
 
 	[FlagsAttribute]
-	public enum TileType
+	public enum ETileType
 	{
 		Invalid		= 0x0,
 
@@ -106,160 +106,160 @@ namespace Model
 		public static readonly float TILE_OFFSET = 0.5f; // in unity world
 		public static readonly float TILE_SCREEN_OFFSET = 7f * 0.5f;//((float)BOARD_ROWS * TILE_OFFSET) * 0.2f;
 
-		private Dictionary<Letter, int> m_letterPoints = new Dictionary<Letter, int>()
+		private Dictionary<ELetter, int> m_letterPoints = new Dictionary<ELetter, int>()
 		{
 			// 1 pt
-			{ Letter.E, 			1 },
-			{ Letter.A, 			1 },
-			{ Letter.I, 			1 },
-			{ Letter.O, 			1 },
-			{ Letter.N, 			1 },
-			{ Letter.R, 			1 },
-			{ Letter.T, 			1 },
-			{ Letter.L, 			1 },
-			{ Letter.S, 			1 },
-			{ Letter.U, 			1 },
+			{ ELetter.E, 			1 },
+			{ ELetter.A, 			1 },
+			{ ELetter.I, 			1 },
+			{ ELetter.O, 			1 },
+			{ ELetter.N, 			1 },
+			{ ELetter.R, 			1 },
+			{ ELetter.T, 			1 },
+			{ ELetter.L, 			1 },
+			{ ELetter.S, 			1 },
+			{ ELetter.U, 			1 },
 					  
 			// 2 pt   
-			{ Letter.D, 			2 },
-			{ Letter.G, 			2 },
+			{ ELetter.D, 			2 },
+			{ ELetter.G, 			2 },
 					  
 			// 3 pt   
-			{ Letter.B, 			3 },
-			{ Letter.C, 			3 },
-			{ Letter.M, 			3 },
-			{ Letter.P, 			3 },
+			{ ELetter.B, 			3 },
+			{ ELetter.C, 			3 },
+			{ ELetter.M, 			3 },
+			{ ELetter.P, 			3 },
 					  
 			// 4 pt   
-			{ Letter.F, 			4 },
-			{ Letter.H, 			4 },
-			{ Letter.V, 			4 },
-			{ Letter.W, 			4 },
-			{ Letter.Y, 			4 },
+			{ ELetter.F, 			4 },
+			{ ELetter.H, 			4 },
+			{ ELetter.V, 			4 },
+			{ ELetter.W, 			4 },
+			{ ELetter.Y, 			4 },
 					  
 			// 5 pt   
-			{ Letter.K, 			5 },
+			{ ELetter.K, 			5 },
 					  
 			// 8 pt   
-			{ Letter.J, 			8 },
-			{ Letter.X, 			8 },
+			{ ELetter.J, 			8 },
+			{ ELetter.X, 			8 },
 
 			// 10 pt  
-			{ Letter.Q, 			10 },
-			{ Letter.Z, 			10 },
+			{ ELetter.Q, 			10 },
+			{ ELetter.Z, 			10 },
 
 			// 0 pt
-			{ Letter.Blank, 		0 },
+			{ ELetter.Blank, 		0 },
 		};
 
-		private Dictionary<Letter, int> m_letterCount = new Dictionary<Letter, int>()
+		private Dictionary<ELetter, int> m_letterCount = new Dictionary<ELetter, int>()
 		{
 			// 1 pt
-			{ Letter.E, 			12 },
-			{ Letter.A, 			9 },
-			{ Letter.I, 			9 },
-			{ Letter.O, 			8 },
-			{ Letter.N, 			6 },
-			{ Letter.R, 			6 },
-			{ Letter.T, 			6 },
-			{ Letter.L, 			4 },
-			{ Letter.S, 			4 },
-			{ Letter.U, 			4 },
+			{ ELetter.E, 			12 },
+			{ ELetter.A, 			9 },
+			{ ELetter.I, 			9 },
+			{ ELetter.O, 			8 },
+			{ ELetter.N, 			6 },
+			{ ELetter.R, 			6 },
+			{ ELetter.T, 			6 },
+			{ ELetter.L, 			4 },
+			{ ELetter.S, 			4 },
+			{ ELetter.U, 			4 },
 			
 			// 2 pt   
-			{ Letter.D, 			4 },
-			{ Letter.G, 			3 },
+			{ ELetter.D, 			4 },
+			{ ELetter.G, 			3 },
 			
 			// 3 pt   
-			{ Letter.B, 			2 },
-			{ Letter.C, 			2 },
-			{ Letter.M, 			2 },
-			{ Letter.P, 			2 },
+			{ ELetter.B, 			2 },
+			{ ELetter.C, 			2 },
+			{ ELetter.M, 			2 },
+			{ ELetter.P, 			2 },
 			
 			// 4 pt   
-			{ Letter.F, 			2 },
-			{ Letter.H, 			2 },
-			{ Letter.V, 			2 },
-			{ Letter.W, 			2 },
-			{ Letter.Y, 			2 },
+			{ ELetter.F, 			2 },
+			{ ELetter.H, 			2 },
+			{ ELetter.V, 			2 },
+			{ ELetter.W, 			2 },
+			{ ELetter.Y, 			2 },
 			
 			// 5 pt   
-			{ Letter.K, 			1 },
+			{ ELetter.K, 			1 },
 			
 			// 8 pt   
-			{ Letter.J, 			1 },
-			{ Letter.X, 			1 },
+			{ ELetter.J, 			1 },
+			{ ELetter.X, 			1 },
 			
 			// 10 pt  
-			{ Letter.Q, 			1 },
-			{ Letter.Z, 			1 },
+			{ ELetter.Q, 			1 },
+			{ ELetter.Z, 			1 },
 			
 			// 0 pt
-			{ Letter.Blank, 		2 },
+			{ ELetter.Blank, 		2 },
 		};
 
-		private Dictionary<TileType, int> m_tileCount = new Dictionary<TileType, int>()
+		private Dictionary<ETileType, int> m_tileCount = new Dictionary<ETileType, int>()
 		{
-			{ TileType.BK, 		198 },
-			{ TileType.TW, 		8 },
-			{ TileType.DW, 		12 },
-			{ TileType.TL, 		12 },
-			{ TileType.DL, 		24 },
-			{ TileType.ST, 		1 },
+			{ ETileType.BK, 		198 },
+			{ ETileType.TW, 		8 },
+			{ ETileType.DW, 		12 },
+			{ ETileType.TL, 		12 },
+			{ ETileType.DL, 		24 },
+			{ ETileType.ST, 		1 },
 		};
 
-		private Dictionary<TileType, string> m_tileSprite = new Dictionary<TileType, string>()
+		private Dictionary<ETileType, string> m_tileSprite = new Dictionary<ETileType, string>()
 		{
-			{ TileType.BK, 		"tile_empty" },
-			{ TileType.TW, 		"tile_TW" },
-			{ TileType.DW, 		"tile_DW" },
-			{ TileType.TL, 		"tile_TL" },
-			{ TileType.DL, 		"tile_DL" },
-			{ TileType.ST, 		"tile_DW" },
+			{ ETileType.BK, 		"tile_empty" },
+			{ ETileType.TW, 		"tile_TW" },
+			{ ETileType.DW, 		"tile_DW" },
+			{ ETileType.TL, 		"tile_TL" },
+			{ ETileType.DL, 		"tile_DL" },
+			{ ETileType.ST, 		"tile_DW" },
 		};
 
-		public static TileType[,] m_boardMap = new TileType[15, 15]
+		public static ETileType[,] m_boardMap = new ETileType[15, 15]
 		{
-			{ TileType.TW, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.TW },
-			{ TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK },
-			{ TileType.DL, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.DL },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK },
-			{ TileType.TW, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.TW },
-			{ TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK },
-			{ TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.BK },
-			{ TileType.DL, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.DL },
-			{ TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK, TileType.BK },
-			{ TileType.BK, TileType.DW, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.TL, TileType.BK, TileType.BK, TileType.BK, TileType.DW, TileType.BK },
-			{ TileType.TW, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.BK, TileType.TW, TileType.BK, TileType.BK, TileType.BK, TileType.DL, TileType.BK, TileType.BK, TileType.TW },
+			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
+			{ ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK },
+			{ ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK },
+			{ ETileType.DL, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.DL },
+			{ ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK },
+			{ ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK },
+			{ ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK },
+			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
+			{ ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK },
+			{ ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK },
+			{ ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK },
+			{ ETileType.DL, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.DL },
+			{ ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK },
+			{ ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK },
+			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
 		};
 
-		public int LetterPoints (Letter p_letter)
+		public int LetterPoints (ELetter p_letter)
 		{
 			return m_letterPoints[p_letter];
 		}
 
-		public int LetterCount (Letter p_letter)
+		public int LetterCount (ELetter p_letter)
 		{
 			return m_letterCount[p_letter];
 		}
 
-		public int TileCount (TileType p_tile)
+		public int TileCount (ETileType p_tile)
 		{
 			return m_tileCount[p_tile];
 		}
 
-		public string TileSprite (TileType p_tile)
+		public string TileSprite (ETileType p_tile)
 		{
 			return m_tileSprite[p_tile];
 		}
 
-		public TileType[,] Map { get { return m_boardMap; } }
+		public ETileType[,] Map { get { return m_boardMap; } }
 
-		public TileType MapFrom (int p_row, int p_col)
+		public ETileType MapFrom (int p_row, int p_col)
 		{
 			//this.Log(Tags.Log, "BOARD::MapFrom row:{0} col:{1}", p_row, p_col);
 			return m_boardMap[p_row, p_col];

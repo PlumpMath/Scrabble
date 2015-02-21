@@ -34,7 +34,7 @@ namespace Board
 				for (int col = 0; col < BOARD.BOARD_COLS; col++)
 				{
 					// generate tile
-					Tile tile = this.CreateBoardTile(m_tile, TileType.BK);
+					Tile tile = this.CreateBoardTile(m_tile, ETileType.BK);
 					tile.name = "Tile_" + col + "_" + row;
 					tile.transform.parent = this.transform;
 
