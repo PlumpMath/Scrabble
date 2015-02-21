@@ -33,10 +33,12 @@ namespace Board
 			{
 				for (int col = 0; col < BOARD.BOARD_COLS; col++)
 				{
+					// generate tile
 					Tile tile = this.CreateTile(m_tile, TileType.BK);
 					tile.name = "Tile_" + col + "_" + row;
 					tile.transform.parent = this.transform;
 
+					// adjust position
 					Vector3 position = m_tile.transform.position;
 					position.x = (col * BOARD.TILE_OFFSET) - BOARD.TILE_SCREEN_OFFSET;
 					position.y = (row * BOARD.TILE_OFFSET) - BOARD.TILE_SCREEN_OFFSET;
