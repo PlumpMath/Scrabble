@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace Ext
 {
+	using Board;
+	using Model;
    
 	public enum Tags
 	{
@@ -203,5 +205,13 @@ namespace Ext
             }
         }
         #endregion
+
+		#region SCRABBLE EXTENSION
+		public static Tile CreateBoardTile (this MonoBehaviour p_self, Tile p_peg, TileType p_type)			         
+		{
+			GameObject tile = (GameObject)GameObject.Instantiate(p_peg.gameObject);
+			return tile.GetComponent<Tile>();
+		}
+		#endregion
     }
 }

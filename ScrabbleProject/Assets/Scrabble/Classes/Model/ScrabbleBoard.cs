@@ -34,7 +34,7 @@ namespace Board
 				for (int col = 0; col < BOARD.BOARD_COLS; col++)
 				{
 					// generate tile
-					Tile tile = this.CreateTile(m_tile, TileType.BK);
+					Tile tile = this.CreateBoardTile(m_tile, TileType.BK);
 					tile.name = "Tile_" + col + "_" + row;
 					tile.transform.parent = this.transform;
 
@@ -51,12 +51,6 @@ namespace Board
 
 			// hide peg
 			m_tile.gameObject.SetActive(false);
-		}
-
-		private Tile CreateTile (Tile p_peg, TileType p_type)			         
-		{
-			GameObject tile = (GameObject)GameObject.Instantiate(p_peg.gameObject);
-			return tile.GetComponent<Tile>();
 		}
 	}
 }
