@@ -26,6 +26,7 @@ namespace Board
 			m_letterViews = new List<Letter>();
 
 			// test add dummy letter
+			/*
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
@@ -33,6 +34,7 @@ namespace Board
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
+			*/
 
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}
@@ -68,6 +70,7 @@ namespace Board
 			p_letter.Tile = null;
 			p_letter.transform.localScale = new Vector3(BOARD.LETTER_OFFSET, BOARD.LETTER_OFFSET, 0f);
 			p_letter.transform.localPosition = m_letter.transform.position;
+			m_letters.Add(p_letter.Type);
 			m_letterViews.Add(p_letter);
 			this.AdjustPosition();
 		}
@@ -147,7 +150,7 @@ namespace Board
 
 				case EEvents.OnPressedPass:
 				{
-					int limit = RACK_LIMIT - m_letters.Count;
+					int limit = (RACK_LIMIT - m_letters.Count);
 					this.Log(Tags.Log, "Rack::OnEventListened OnPressedPass limit:{0}", limit);
 					
 					if (limit > 0)
