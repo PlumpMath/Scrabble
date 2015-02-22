@@ -55,9 +55,24 @@ public class SignalDrawer : PropertyDrawer
 						}
 						else
 						{
-							if (parameters.Length == 1 && parameters[0].ParameterType.FullName.Equals(argType))
+							//if (parameters.Length == 1 && parameters[0].ParameterType.FullName.Equals(argType))
+							//	addMethod = true;
+							// +AS:02222015 Add support on NameSpaces
+							string param = parameters[0].ParameterType.FullName;
+							if (parameters.Length == 1 && param.Contains(argType))
+							{
 								addMethod = true;
+							}
 						}
+					
+						// +AS:02222015 Debug logs
+						/*
+						if (parameters.Length == 1)
+						{
+							string param = parameters[0].ParameterType.FullName;
+							Debug.Log("Signal ArgType:" + argType + " param:" + param);
+						}
+						*/
 
 						if (addMethod)
 						{
