@@ -400,6 +400,15 @@ namespace Board
 			twdlCount.Add(ETileType.DW, 0);
 			twdlCount.Add(ETileType.TW, 0);
 
+			bool isScrabble = false;
+			Dictionary<ETileType, bool> wordModifiers = new Dictionary<ETileType, bool>()
+			{
+				{ ETileType.DL, false },
+				{ ETileType.TL, false },
+				{ ETileType.DW, false },
+				{ ETileType.TW, false },
+			};
+
 			// calculate points
 			if (isValid)
 			{
@@ -407,6 +416,12 @@ namespace Board
 				{
 					ETileType tileType = p_tiles[i];
 					int letterPoints = p_points[i];
+
+					// update word modifiers
+					if (wordModifiers.ContainsKey(tileType))
+					{
+						wordModifiers[tileType] = true;
+					}
 
 					// contains word score multiplier
 					if (twdlCount.ContainsKey(tileType))
@@ -424,13 +439,6 @@ namespace Board
 					totalWordPoints += letterPoints;
 				}
 
-				// +50 Bonus points for 7 letter word
-				if (p_points.Count >= 7)
-				{
-					this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Scrabble! +50 pts Word:{0} Score:{1} NewScore:{2}", p_word, totalWordPoints, totalWordPoints + 50);
-					totalWordPoints += 50;
-				}
-
 				// check for word multiplier
 				foreach (KeyValuePair<ETileType, int> pair in twdlCount)
 				{
@@ -440,7 +448,16 @@ namespace Board
 					}
 				}
 
+				// +50 Bonus points for 7 letter word
+				if (p_points.Count >= 7)
+				{
+					this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Scrabble! +50 pts Word:{0} Score:{1} NewScore:{2}", p_word, totalWordPoints, totalWordPoints + 50);
+					totalWordPoints += 50;
+					isScrabble = true;
+				}
+
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords VALID Word:{0} Score:{1}", p_word, totalWordPoints);
+				ScrabbleEvent.Instance.Trigger(EEvents.OnScoreComputed, new ScoreEvent(totalWordPoints, wordModifiers, isScrabble));
 			}
 			else
 			{
