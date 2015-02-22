@@ -26,10 +26,14 @@ namespace Board
 			m_tiles = new List<Tile>();
 
 			this.InitializeBoard();
-			this.InitializeActiveTiles();
 
 			// initialize event
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
+		}
+
+		private void Start ()
+		{
+			this.InitializeActiveTiles();
 		}
 		
 		private void OnDestroy ()
@@ -73,6 +77,13 @@ namespace Board
 
 		private void InitializeActiveTiles ()
 		{
+			// deactivate all tiles
+			foreach (Tile tile in m_tiles)
+			{
+				tile.Deactivate();
+			}
+
+			// activate initial tile
 			m_tileGrid[m_model.Default.Row, m_model.Default.Col].Activate();
 		}
 
@@ -114,7 +125,7 @@ namespace Board
 							ScrabbleEvent.Instance.Trigger(EEvents.OnCleanUpRack, new SnapEvent(tile, letter.Type));
 
 							// TODO: Trigger active neighbor tiles!
-							this.EnableNeighbors(tile.TileModel.Row, tile.TileModel.Col, tile);
+							this.EnableNeighbors();
 
 							break;
 						}
@@ -147,29 +158,7 @@ namespace Board
 
 			foreach (Tile tile in occupiedTiles)
 			{
-
-			}
-		}
-
-		private void EnableNeighbors (int p_row, int p_col)
-		{
-			for (int row = -1; row < 2; row++)
-			{
-				for (int col = -1; col < 2; col++)
-				{
-					if (row == 0 && col == 0) { continue; }
-					if (row == 1 && col == 1) { continue; }
-					if (row == -1 && col == -1) { continue; }
-					/*			
-					int nRow = p_tile.TileModel.Row + row;
-					int nCol = p_tile.TileModel.Col + col;
-					
-					if (nRow < 0 || nCol > BOARD.BOARD_COLS - 1) { continue; }
-					
-					// activate tile
-					m_tileGrid[nRow, nCol].Activate();
-					*/
-				}
+				this.EnableNeighbors(tile.TileModel.Row, tile.TileModel.Col, tile);
 			}
 		}
 
@@ -182,9 +171,12 @@ namespace Board
 			{
 				for (int col = -1; col < 2; col++)
 				{
+					// blocked tiles
 					if (row == 0 && col == 0) { continue; }
 					if (row == 1 && col == 1) { continue; }
 					if (row == -1 && col == -1) { continue; }
+					if (row == 1 && col == -1) { continue; }
+					if (row == -1 && col == 1) { continue; }
 
 					int nRow = p_tile.TileModel.Row + row;
 					int nCol = p_tile.TileModel.Col + col;

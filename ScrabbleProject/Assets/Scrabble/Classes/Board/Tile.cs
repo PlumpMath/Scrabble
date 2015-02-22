@@ -102,6 +102,7 @@ namespace Board
 			model.IsActive = true;
 			model.Letter = null;
 			this.TileModel = model;
+			m_skin.color = Color.white;
 		}
 
 		public void Deactivate ()
@@ -109,6 +110,7 @@ namespace Board
 			TileModel model = this.TileModel;
 			model.IsActive = false;
 			this.TileModel = model;
+			m_skin.color = Color.gray;
 		}
 
 		private void UpdateSkin ()
