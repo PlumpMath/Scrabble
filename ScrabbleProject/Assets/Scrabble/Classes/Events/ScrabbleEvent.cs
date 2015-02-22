@@ -24,9 +24,17 @@ namespace Events
 		/// A letter is successfully dropped on a tile, so snap it!
 		/// Snap Data:
 		/// 	- Tile
-		/// 	- Letter
+		/// 	- ELetter
 		/// </summary>
 		OnSnapped	= 0x1 << 1,
+
+		/// <summary>
+		/// Remove the snapped letter on Rack!
+		/// Snap Data
+		/// 	- Tile
+		/// 	- ELetter
+		/// </summary>
+		OnCleanUpRack = 0x1 << 2,
 	}; 
 
 	public class ScrabbleEvent

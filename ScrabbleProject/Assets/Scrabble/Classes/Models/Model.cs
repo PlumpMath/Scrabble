@@ -97,12 +97,14 @@ namespace Model
 			start.Row = BOARD.START_TILE_ROW;
 			start.Col = BOARD.START_TILE_COL;
 			start.IsActive = false;
-			start.Tile = null;
+			start.Letter = null;
 			this.Default = start;
 		}
 
 		public BOARD Board { get; private set; }
 		public TileModel Default { get; private set; }
+		public ScrabbleBoard Scrabble { get; set; }
+		public Rack Rack { get; set; }
 	}
 
 	[Serializable]
@@ -111,7 +113,7 @@ namespace Model
 		public int Row;
 		public int Col;
 		public bool IsActive;
-		public Tile Tile;
+		public Letter Letter;
 	}
 
 	public sealed class BOARD

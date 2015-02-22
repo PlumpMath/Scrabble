@@ -21,6 +21,7 @@ namespace Board
 			this.Assert<Tile>(m_tile, "m_tile must never be null!");
 
 			m_model = Model.Instance;
+			m_model.Scrabble = this;
 			m_tileGrid = new Tile[BOARD.BOARD_ROWS, BOARD.BOARD_COLS];
 			m_tiles = new List<Tile>();
 
@@ -83,6 +84,7 @@ namespace Board
 				{
 					DropEvent drop = (DropEvent)p_data;
 					Vector3 pos = drop.Data<Vector3>(DropEvent.POSITION);
+					Vector2 newPos = new Vector2(pos.x, pos.y);
 					Letter letter = drop.Data<Letter>(DropEvent.LETTER);
 
 					//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
@@ -90,26 +92,47 @@ namespace Board
 					Predicate<Tile> filter = (Tile tile) => { return tile.IsActive; };
 					List<Tile> activeTiles = m_tiles.FindAll(filter);
 					bool snapped = false;
-
+					
 					foreach (Tile tile in activeTiles)
 					{
-						if (tile.Rect.Contains(pos))
+						//bool contains = tile.Rect.Contains(newPos);
+						Rect rect = tile.Rect;
+						bool contains = rect.center.x <= newPos.x &&
+										rect.center.y <= newPos.y &&
+										rect.size.x >= newPos.x &&
+										rect.size.y >= newPos.y;
+
+						if (contains)
 						{
 							this.Log(Tags.Log, "Snap!");
 							snapped = true;
 							
 							// TODO: Trigger Snapping
-							ScrabbleEvent.Instance.Trigger(EEvents.OnSnapped, new SnapEvent(tile, letter));
+							ScrabbleEvent.Instance.Trigger(EEvents.OnSnapped, new SnapEvent(tile, letter.Type));
 							
+							// Cleanup rack
+							ScrabbleEvent.Instance.Trigger(EEvents.OnCleanUpRack, new SnapEvent(tile, letter.Type));
+
 							// TODO: Trigger active neighbor tiles!
 
 							break;
+						}
+						else
+						{
+							this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop Row:{0} Col:{1} IsActive:{2} Rect:{3} Pos:{4}", tile.TileModel.Row, tile.TileModel.Col, tile.TileModel.IsActive, tile.Rect, newPos);
 						}
 					}
 
 					if (!snapped)
 					{
-						letter.Reset();
+						if (letter.Tile == null)
+						{
+							letter.Reset();
+						}
+						else
+						{
+							Model.Instance.Rack.AddLetter(letter);
+						}
 					}
 				}
 				break;

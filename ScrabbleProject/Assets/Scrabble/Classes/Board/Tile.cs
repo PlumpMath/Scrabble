@@ -5,6 +5,7 @@ using System;
 namespace Board
 {
 	using Ext;
+	using Events;
 	using Model;
 
 	public class Tile : MonoBehaviour
@@ -23,9 +24,11 @@ namespace Board
 			m_tileModel.Row = -1;
 			m_tileModel.Col = -1;
 			m_tileModel.IsActive = false;
-			m_tileModel.Tile = null;
+			m_tileModel.Letter = null;
 
 			m_model = Model.Instance;
+
+			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}
 
 		private void Start ()
@@ -37,6 +40,7 @@ namespace Board
 		private void OnDestroy ()
 		{
 			this.Type = ETileType.Invalid;
+			ScrabbleEvent.Instance.OnTriggerEvent -= this.OnEventListened;
 		}
 
 		/// <summary>
@@ -96,6 +100,7 @@ namespace Board
 		{
 			TileModel model = this.TileModel;
 			model.IsActive = true;
+			model.Letter = null;
 			this.TileModel = model;
 		}
 
@@ -110,6 +115,31 @@ namespace Board
 		{
 			if (m_type == ETileType.Invalid) { return; }
 			m_skin.spriteId = m_skin.GetSpriteIdByName(m_model.Board.TileSprite(m_type));
+		}
+
+		private void OnEventListened (EEvents p_type, IEventData p_data)
+		{
+			switch (p_type)
+			{
+				case EEvents.OnSnapped:
+				{
+					SnapEvent snap = (SnapEvent)p_data;
+					Tile tile = snap.Data<Tile>(SnapEvent.TILE);
+					ELetter eletter = snap.Data<ELetter>(SnapEvent.LETTER);
+					Letter letter = m_model.Rack.Letter(eletter);
+					
+					if (tile.TileModel.Row == m_tileModel.Row
+				    &&	tile.TileModel.Col == m_tileModel.Col
+				   	) {
+						this.Log(Tags.Log, "Tile::OnEventListened Tile:{0} Letter:{1}", tile, letter);
+						letter.transform.position = this.transform.position;
+						letter.transform.localScale = new Vector3(BOARD.TILE_OFFSET, BOARD.TILE_OFFSET, 0f);
+						this.Deactivate();
+						m_tileModel.Letter = letter;
+					}
+				}
+				break;
+			}
 		}
 	}
 }

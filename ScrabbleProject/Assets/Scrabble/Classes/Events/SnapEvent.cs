@@ -16,7 +16,7 @@ namespace Events
 		
 		private Dictionary<string, object> m_eventData;
 
-		public SnapEvent (Tile p_tile, Letter p_letter)
+		public SnapEvent (Tile p_tile, ELetter p_letter)
 		{
 			m_eventData = new Dictionary<string, object>();
 			m_eventData.Add(TILE, p_tile);
@@ -27,7 +27,8 @@ namespace Events
 		
 		public Dictionary<string, object> EventData ()
 		{
-			return m_eventData.Clone<string, object>();
+			//return m_eventData.Clone<string, object>();
+			return null;
 		}
 		
 		public bool Has (string p_key)
