@@ -145,6 +145,8 @@ namespace Board
 						{
 							Model.Instance.Rack.AddLetter(letter);
 						}
+
+						this.EnableNeighbors();
 					}
 				}
 				break;
@@ -153,12 +155,33 @@ namespace Board
 
 		private void EnableNeighbors ()
 		{
+			// deactivate inactive tiles
+			this.DisableNeighbors();
+
 			Predicate<Tile> filter = (Tile tile) => { return tile.TileModel.Letter != null; };
 			List<Tile> occupiedTiles = m_tiles.FindAll(filter);
 
 			foreach (Tile tile in occupiedTiles)
 			{
 				this.EnableNeighbors(tile.TileModel.Row, tile.TileModel.Col, tile);
+			}
+		}
+
+		private void DisableNeighbors ()
+		{
+			foreach (Tile tile in m_tiles)
+			{
+				if (tile.TileModel.Letter == null)
+				{
+					tile.Deactivate();
+				}
+			}
+
+			// initial tile
+			Tile initTile = m_tileGrid[m_model.Default.Row, m_model.Default.Col];
+			if (initTile.TileModel.Letter == null)
+			{
+				initTile.Activate();
 			}
 		}
 
