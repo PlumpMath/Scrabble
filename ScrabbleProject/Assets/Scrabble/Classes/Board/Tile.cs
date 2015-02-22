@@ -1,20 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace Board
 {
 	using Ext;
 	using Model;
 
-	public class Tile : MonoBehaviour 
+	public class Tile : MonoBehaviour
 	{
 		[SerializeField] private ETileType m_type;
 		[SerializeField] private tk2dSlicedSprite m_skin; 
+		[SerializeField] private TileModel m_tileModel;
 		private Model m_model;
 
 		private void Awake ()
 		{
 			this.Assert<tk2dSlicedSprite>(m_skin, "m_skin must never be null!");
+
+			// Initialize default tile model
+			m_tileModel = new TileModel();
+			m_tileModel.Row = -1;
+			m_tileModel.Col = -1;
+			m_tileModel.IsActive = false;
+			m_tileModel.Tile = null;
+
 			m_model = Model.Instance;
 		}
 
@@ -32,9 +42,18 @@ namespace Board
 		/// <summary>
 		/// True: You can place a letter on it
 		/// </summary>
-		public bool IsActive { get; private set; }
+		public bool IsActive 
+		{ 
+			get { return this.TileModel.IsActive; }
+		}
 
-		// TODO: Add letter here
+		public TileModel TileModel 
+		{ 
+			get { return m_tileModel; }
+			private set { m_tileModel = value; }
+		}
+
+		public Rect Rect { get; private set; }
 
 		public ETileType Type
 		{ 
@@ -50,10 +69,41 @@ namespace Board
 			this.UpdateSkin();
 		}
 
-		public void PreloadSkin (ETileType p_type)
-		{
+		public void PreloadSkin (
+			ETileType p_type, 
+			int p_row, 
+			int p_col
+		) {
 			this.Assert(p_type != ETileType.Invalid, "m_type is Invalid!");
 			m_type = p_type;
+
+			TileModel model = this.TileModel;
+			model.Row = p_row;
+			model.Col = p_col;
+			this.TileModel = model;
+
+			// generate rect
+			float offset = BOARD.TILE_OFFSET;
+			Vector2 pos = this.transform.position;
+			Rect rect = new Rect(pos.x - offset,
+			                     pos.y - offset,
+			                     pos.x + offset,
+			                     pos.y + offset);
+			this.Rect = rect;
+		}
+
+		public void Activate ()
+		{
+			TileModel model = this.TileModel;
+			model.IsActive = true;
+			this.TileModel = model;
+		}
+
+		public void Deactivate ()
+		{
+			TileModel model = this.TileModel;
+			model.IsActive = false;
+			this.TileModel = model;
 		}
 
 		private void UpdateSkin ()

@@ -4,6 +4,8 @@ using System.Collections;
 
 namespace MGTools
 {
+	using Board;
+	using Events;
 	using Ext;
 
 	[RequireComponent(typeof(BoxCollider2D))]
@@ -13,9 +15,13 @@ namespace MGTools
 		private Vector3 m_offset;
 		private Vector3 m_rackos;
 
+		private void Awake ()
+		{
+		}
+
 		private void OnMouseDown ()
 		{
-			this.Log(Tags.Log, "Draggable::OnMouseDown pos:{0}", this.transform.localPosition);
+			this.Log(Tags.Log, "Draggable::OnMouseDown pos:{0}", this.transform.position);
 			m_rackos = this.transform.position;
 			m_screenPoint =  MGCamera.Instance.ScrabbleCamera.WorldToScreenPoint(m_rackos);
 			m_offset = m_rackos - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, m_screenPoint.z));
@@ -30,8 +36,8 @@ namespace MGTools
 
 		private void OnMouseUp ()
 		{
-			// TODO: Check for valid position
-			this.transform.position = m_rackos;
+			// trigger event
+			ScrabbleEvent.Instance.Trigger(EEvents.OnDrop, new DropEvent(this.transform.position, this.GetComponent<Letter>()));
 		}
 	}
 }

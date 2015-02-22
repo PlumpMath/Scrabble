@@ -219,5 +219,19 @@ namespace Ext
 			return letter.GetComponent<Letter>();
 		}
 		#endregion
+
+		#region Dictionary EXTENSION
+		public static Dictionary<K, V> Clone<K, V> (this Dictionary<K, V> p_self)			         
+		{
+			Dictionary<K, V> clone = new Dictionary<K, V>();
+
+			foreach (KeyValuePair<K, V> pair in p_self)
+			{
+				clone.Add(pair.Key, pair.Value);
+			}
+
+			return clone;
+		}
+		#endregion
     }
 }

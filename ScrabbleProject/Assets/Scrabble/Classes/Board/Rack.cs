@@ -83,11 +83,13 @@ namespace Board
 				{
 					float newX = letter.transform.position.x - computedDist;
 					letter.transform.SetX(newX);
+					letter.Ready(); 
 				}
 			}
 			else if (m_letterViews.Count == 1)
 			{
 				m_letterViews[0].transform.localPosition = m_letter.transform.position;
+				m_letterViews[0].Ready();
 			}
 		}
 	}
