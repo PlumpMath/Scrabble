@@ -23,7 +23,7 @@ namespace Board
 			m_tileModel = new TileModel();
 			m_tileModel.Row = -1;
 			m_tileModel.Col = -1;
-			m_tileModel.IsActive = false;
+			m_tileModel.Status = ETileStatus.Empty;
 			m_tileModel.Letter = null;
 
 			m_model = Model.Instance;
@@ -48,13 +48,19 @@ namespace Board
 		/// </summary>
 		public bool IsActive 
 		{ 
-			get { return this.TileModel.IsActive; }
+			get { return this.TileModel.Status == ETileStatus.Open; }
 		}
 
 		public TileModel TileModel 
 		{ 
 			get { return m_tileModel; }
 			private set { m_tileModel = value; }
+		}
+
+		public ETileStatus Status
+		{
+			get { return m_tileModel.Status; }
+			private set { m_tileModel.Status = value; }
 		}
 
 		public Rect Rect { get; private set; }
@@ -99,8 +105,8 @@ namespace Board
 		public void Activate ()
 		{
 			TileModel model = this.TileModel;
-			model.IsActive = true;
 			model.Letter = null;
+			model.Status = ETileStatus.Open;
 			this.TileModel = model;
 			m_skin.color = Color.white;
 		}
@@ -108,7 +114,7 @@ namespace Board
 		public void Deactivate ()
 		{
 			TileModel model = this.TileModel;
-			model.IsActive = false;
+			model.Status = ETileStatus.Empty;
 			this.TileModel = model;
 			m_skin.color = Color.gray;
 		}
@@ -136,8 +142,8 @@ namespace Board
 						this.Log(Tags.Log, "Tile::OnEventListened Tile:{0} Letter:{1}", tile, letter);
 						letter.transform.position = this.transform.position;
 						letter.transform.localScale = new Vector3(BOARD.TILE_OFFSET, BOARD.TILE_OFFSET, 0f);
-						this.Deactivate();
 						m_tileModel.Letter = letter;
+						m_tileModel.Status = ETileStatus.Occupied;
 					}
 				}
 				break;
