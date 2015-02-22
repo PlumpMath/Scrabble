@@ -338,7 +338,7 @@ namespace Board
 				word += Model.Instance.Board.LetterText(tile.TileModel.Letter.Type);
 			}
 
-			this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontal Word:{0}", word);
+			this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontal Word:{0} IsValid:{1}", word, WordManager.Instance.IsValid(word));
 		}
 
 		/// <summary>
@@ -360,7 +360,11 @@ namespace Board
 				word += Model.Instance.Board.LetterText(tile.TileModel.Letter.Type);
 			}
 			
-			this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontal Word:{0}", word);
+			this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontal Word:{0} IsValid:{1}", word, WordManager.Instance.IsValid(word));
+		}
+
+		private void ValidateWords (string p_word, int[] p_points, ETileType[] p_tiles)
+		{
 		}
 	}
 }
