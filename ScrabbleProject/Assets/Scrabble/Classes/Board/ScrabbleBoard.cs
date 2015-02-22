@@ -8,9 +8,14 @@ namespace Board
 	using Ext;
 	using Events;
 	using Model;
+	using MGTools;
 
 	public class ScrabbleBoard : MonoBehaviour 
 	{
+		// Filters
+		private Predicate<Tile> ACTIVE = new Predicate<Tile>(t => t.TileModel.IsActive == true);
+		private Predicate<Tile> OCCUPIED = new Predicate<Tile>(t => t.TileModel.Letter != null);
+
 		[SerializeField] private Tile m_tile;
 		[SerializeField] private Tile[,] m_tileGrid;
 		private List<Tile> m_tiles;
@@ -21,14 +26,19 @@ namespace Board
 			this.Assert<Tile>(m_tile, "m_tile must never be null!");
 
 			m_model = Model.Instance;
+			m_model.Scrabble = this;
 			m_tileGrid = new Tile[BOARD.BOARD_ROWS, BOARD.BOARD_COLS];
 			m_tiles = new List<Tile>();
 
 			this.InitializeBoard();
-			this.InitializeActiveTiles();
 
 			// initialize event
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
+		}
+
+		private void Start ()
+		{
+			this.InitializeActiveTiles();
 		}
 		
 		private void OnDestroy ()
@@ -72,6 +82,13 @@ namespace Board
 
 		private void InitializeActiveTiles ()
 		{
+			// deactivate all tiles
+			foreach (Tile tile in m_tiles)
+			{
+				tile.Deactivate();
+			}
+
+			// activate initial tile
 			m_tileGrid[m_model.Default.Row, m_model.Default.Col].Activate();
 		}
 
@@ -83,36 +100,153 @@ namespace Board
 				{
 					DropEvent drop = (DropEvent)p_data;
 					Vector3 pos = drop.Data<Vector3>(DropEvent.POSITION);
+					Vector2 newPos = new Vector2(pos.x, pos.y);
 					Letter letter = drop.Data<Letter>(DropEvent.LETTER);
 
 					//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
 					
-					Predicate<Tile> filter = (Tile tile) => { return tile.IsActive; };
-					List<Tile> activeTiles = m_tiles.FindAll(filter);
+					List<Tile> activeTiles = m_tiles.FindAll(ACTIVE);
 					bool snapped = false;
-
+					
 					foreach (Tile tile in activeTiles)
 					{
-						if (tile.Rect.Contains(pos))
-						{
-							this.Log(Tags.Log, "Snap!");
-							snapped = true;
-							
-							// TODO: Trigger Snapping
-							ScrabbleEvent.Instance.Trigger(EEvents.OnSnapped, new SnapEvent(tile, letter));
-							
-							// TODO: Trigger active neighbor tiles!
+						//bool contains = tile.Rect.Contains(newPos);
+						Rect rect = tile.Rect;
+						bool contains = rect.center.x <= newPos.x &&
+										rect.center.y <= newPos.y &&
+										rect.size.x >= newPos.x &&
+										rect.size.y >= newPos.y;
 
-							break;
+						if (contains)
+						{
+							// if letter is already placed on a tile, unsnap it!
+							if (letter.Tile != null)
+							{
+								break;
+							}
+							// snap the tile!
+							else
+							{
+								this.Log(Tags.Log, "Snap!");
+								snapped = true;
+								
+								// TODO: Trigger Snapping
+								ScrabbleEvent.Instance.Trigger(EEvents.OnSnapped, new SnapEvent(tile, letter.Type));
+								
+								// Cleanup rack
+								ScrabbleEvent.Instance.Trigger(EEvents.OnCleanUpRack, new SnapEvent(tile, letter.Type));
+
+								// TODO: Trigger active neighbor tiles!
+								this.EnableNeighbors();
+
+								break;
+							}
+						}
+						else
+						{
+							this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop Row:{0} Col:{1} IsActive:{2} Rect:{3} Pos:{4}", tile.TileModel.Row, tile.TileModel.Col, tile.TileModel.IsActive, tile.Rect, newPos);
 						}
 					}
 
 					if (!snapped)
 					{
-						letter.Reset();
+						if (letter.Tile == null)
+						{
+							letter.Reset();
+						}
+						else
+						{
+							Model.Instance.Rack.AddLetter(letter);
+						}
+
+						this.EnableNeighbors();
 					}
 				}
 				break;
+			}
+		}
+
+		[Signal]
+		private void OnPressedButton (MGButton p_button)
+		{
+			this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton Button:{0}", p_button.Button);
+			EButton button = p_button.Button;
+
+			switch (button)
+			{
+				case EButton.Pass:
+				{
+					ScrabbleEvent.Instance.Trigger(EEvents.OnPressedPass, null);
+				}
+				break;
+
+				case EButton.Submit:
+				{
+				}
+				break;
+			}
+		}
+
+		private void EnableNeighbors ()
+		{
+			// deactivate inactive tiles
+			this.DisableNeighbors();
+
+			List<Tile> occupiedTiles = m_tiles.FindAll(OCCUPIED);
+
+			foreach (Tile tile in occupiedTiles)
+			{
+				this.EnableNeighbors(tile.TileModel.Row, tile.TileModel.Col, tile);
+			}
+		}
+
+		/// <summary>
+		/// Flood fill (1x1 neighbor)
+		/// </summary>
+		private void EnableNeighbors (int p_row, int p_col, Tile p_tile)
+		{
+			for (int row = -1; row < 2; row++)
+			{
+				for (int col = -1; col < 2; col++)
+				{
+					// blocked tiles
+					if (row == 0 && col == 0) { continue; }
+					if (row == 1 && col == 1) { continue; }
+					if (row == -1 && col == -1) { continue; }
+					if (row == 1 && col == -1) { continue; }
+					if (row == -1 && col == 1) { continue; }
+
+					int nRow = p_tile.TileModel.Row + row;
+					int nCol = p_tile.TileModel.Col + col;
+
+					if (nRow < 0 || nCol > BOARD.BOARD_COLS - 1) { continue; }
+
+					Tile tile = m_tileGrid[nRow, nCol];
+
+					// activate unoccupied tiles
+					if (tile.TileModel.Letter == null)
+					{
+						tile.Activate();
+					}
+				}
+			}
+		}
+
+		private void DisableNeighbors ()
+		{
+			foreach (Tile tile in m_tiles)
+			{
+				if (tile.TileModel.Letter == null)
+				{
+					tile.Deactivate();
+				}
+			}
+			
+			// initial tile
+			Tile initTile = m_tileGrid[m_model.Default.Row, m_model.Default.Col];
+			if (initTile.TileModel.Letter == null)
+			{
+				initTile.Activate();
 			}
 		}
 	}

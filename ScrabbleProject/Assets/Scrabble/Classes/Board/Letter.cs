@@ -20,6 +20,7 @@ namespace Board
 			this.Assert<tk2dSlicedSprite>(m_skin, "m_skin must never be null!");
 			this.Assert<tk2dTextMesh>(m_txtText, "m_txtText must never be null!");
 			this.Assert<tk2dTextMesh>(m_txtPoints, "m_txtPoints must never be null!");
+			this.Tile = null;
 			m_model = Model.Instance;
 		}
 		
@@ -39,6 +40,8 @@ namespace Board
 			get { return m_letter; } 
 			private set { m_letter = value; }
 		}
+
+		public Tile Tile { get; set; }
 
 		public void UpdateLetter (ELetter p_type)
 		{
