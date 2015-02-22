@@ -73,6 +73,26 @@ namespace Model
 		Max			= 0x1 << 6,
 	};
 
+	[FlagsAttribute]
+	public enum ETileStatus
+	{
+		Invalid		= 0x0,
+		
+		Empty		= 0x1 << 0, // Darkened
+		Open		= 0x1 << 1, // Lightened
+		Occupied	= 0x1 << 2, // Temp a letter is placed
+
+		/// <summary>
+		/// Permanently occupied.
+		/// The word is validated.
+		/// </summary>
+		POccupied	= 0x1 << 3, // A word is validated with in this tile
+		Max			= 0x1 << 4,
+
+		NOT_ACTIVE	= Empty | Occupied | POccupied,
+		NOT_EMPTY	= Occupied | POccupied,
+	};
+
 	public sealed class Model
 	{
 		private static Model m_instance = null;
@@ -96,7 +116,6 @@ namespace Model
 			TileModel start = new TileModel();
 			start.Row = BOARD.START_TILE_ROW;
 			start.Col = BOARD.START_TILE_COL;
-			start.IsActive = false;
 			start.Letter = null;
 			this.Default = start;
 		}
@@ -112,8 +131,9 @@ namespace Model
 	{
 		public int Row;
 		public int Col;
-		public bool IsActive;
+		//public bool IsActive;
 		public Letter Letter;
+		public ETileStatus Status;
 	}
 
 	public sealed class BOARD
