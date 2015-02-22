@@ -134,7 +134,7 @@ namespace Model
 		public static readonly int START_TILE_ROW = 7;
 		public static readonly int START_TILE_COL = 7;
 
-		private Dictionary<ELetter, string> m_letterText = new Dictionary<ELetter, string>()
+		private static Dictionary<ELetter, string> m_letterText = new Dictionary<ELetter, string>()
 		{
 			// 1 pt
 			{ ELetter.E, 			"E" },
@@ -180,7 +180,7 @@ namespace Model
 			{ ELetter.Blank, 		"" },
 		};
 
-		private Dictionary<ELetter, int> m_letterPoints = new Dictionary<ELetter, int>()
+		private static Dictionary<ELetter, int> m_letterPoints = new Dictionary<ELetter, int>()
 		{
 			// 1 pt
 			{ ELetter.E, 			1 },
@@ -226,7 +226,7 @@ namespace Model
 			{ ELetter.Blank, 		0 },
 		};
 
-		private Dictionary<ELetter, int> m_letterCount = new Dictionary<ELetter, int>()
+		private static Dictionary<ELetter, int> m_letterCount = new Dictionary<ELetter, int>()
 		{
 			// 1 pt
 			{ ELetter.E, 			12 },
@@ -272,7 +272,7 @@ namespace Model
 			{ ELetter.Blank, 		2 },
 		};
 
-		private Dictionary<ETileType, int> m_tileCount = new Dictionary<ETileType, int>()
+		private static Dictionary<ETileType, int> m_tileCount = new Dictionary<ETileType, int>()
 		{
 			{ ETileType.BK, 		198 },
 			{ ETileType.TW, 		8 },
@@ -282,7 +282,7 @@ namespace Model
 			{ ETileType.ST, 		1 },
 		};
 
-		private Dictionary<ETileType, string> m_tileSprite = new Dictionary<ETileType, string>()
+		private static Dictionary<ETileType, string> m_tileSprite = new Dictionary<ETileType, string>()
 		{
 			{ ETileType.BK, 		"tile_empty" },
 			{ ETileType.TW, 		"tile_TW" },
@@ -318,6 +318,7 @@ namespace Model
 
 		public int LetterCount (ELetter p_letter)
 		{
+			this.Log(Tags.Log, "BOARD::LetterCount p_letter:{0}", p_letter);
 			return m_letterCount[p_letter];
 		}
 

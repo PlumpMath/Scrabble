@@ -119,7 +119,7 @@ namespace Board
 
 						if (contains)
 						{
-							// if letter is already placed on tile, unsnap it!
+							// if letter is already placed on a tile, unsnap it!
 							if (letter.Tile != null)
 							{
 								break;
@@ -176,7 +176,7 @@ namespace Board
 			{
 				case EButton.Pass:
 				{
-					
+					ScrabbleEvent.Instance.Trigger(EEvents.OnPressedPass, null);
 				}
 				break;
 

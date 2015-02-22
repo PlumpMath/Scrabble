@@ -11,6 +11,8 @@ namespace Board
 
 	public class Rack : MonoBehaviour 
 	{
+		public static readonly int RACK_LIMIT = 7;
+
 		[SerializeField] private Letter m_letter;
 		[SerializeField] private List<ELetter> m_letters; 
 		private List<Letter> m_letterViews;
@@ -24,13 +26,13 @@ namespace Board
 			m_letterViews = new List<Letter>();
 
 			// test add dummy letter
-			this.CreateLetter(ELetter.K);
-			this.CreateLetter(ELetter.A);
-			this.CreateLetter(ELetter.B);
-			this.CreateLetter(ELetter.D);
-			this.CreateLetter(ELetter.E);
-			this.CreateLetter(ELetter.F);
-			this.CreateLetter(ELetter.G);
+			this.CreateLetter(Letters.Instance.Letter());
+			this.CreateLetter(Letters.Instance.Letter());
+			this.CreateLetter(Letters.Instance.Letter());
+			this.CreateLetter(Letters.Instance.Letter());
+			this.CreateLetter(Letters.Instance.Letter());
+			this.CreateLetter(Letters.Instance.Letter());
+			this.CreateLetter(Letters.Instance.Letter());
 
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}
@@ -140,6 +142,21 @@ namespace Board
 
 					// remove the letter from rack
 					this.RemoveLetter(eletter);
+				}
+				break;
+
+				case EEvents.OnPressedPass:
+				{
+					int limit = RACK_LIMIT - m_letters.Count;
+					this.Log(Tags.Log, "Rack::OnEventListened OnPressedPass limit:{0}", limit);
+					
+					if (limit > 0)
+					{
+						for (int i = 0; i < limit; i++)
+						{
+							this.CreateLetter(Letters.Instance.Letter());
+						}
+					}
 				}
 				break;
 			}

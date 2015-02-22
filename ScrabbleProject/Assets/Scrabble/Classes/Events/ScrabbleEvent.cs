@@ -9,7 +9,7 @@ namespace Events
 
 	public enum EEvents
 	{
-		Invalid 	= 0x0,
+		Invalid = 0x0,
 
 		/// <summary>
 		/// Letter is dropped to board.
@@ -18,7 +18,7 @@ namespace Events
 		/// 	Vect3	- World Pos
 		/// 	Tile	- Tile
 		/// </summary>
-		OnDrop		= 0x1 << 0,
+		OnDrop = 0x1 << 0,
 
 		/// <summary>
 		/// A letter is successfully dropped on a tile, so snap it!
@@ -26,7 +26,7 @@ namespace Events
 		/// 	- Tile
 		/// 	- ELetter
 		/// </summary>
-		OnSnapped	= 0x1 << 1,
+		OnSnapped = 0x1 << 1,
 
 		/// <summary>
 		/// Remove the snapped letter on Rack!
@@ -35,6 +35,11 @@ namespace Events
 		/// 	- ELetter
 		/// </summary>
 		OnCleanUpRack = 0x1 << 2,
+
+		/// <summary>
+		/// Button PASS is pressed
+		/// </summary>
+		OnPressedPass = 0x1 << 3,
 	}; 
 
 	public class ScrabbleEvent
