@@ -1,47 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum EButton
+namespace MGTools
 {
-	Pass,
-	Submit,
-};
+	using Board;
+	using Events;
+	using Ext;
 
-public class MGButton : MonoBehaviour 
-{
-	[SerializeField] private EButton m_button;
-	[SerializeField] private bool m_isEnabled;
-	private tk2dSprite m_sprite;
-
-	public Signal OnTriggerAction = new Signal(typeof(MGButton));
-
-	private void Awake ()
+	public enum EButton
 	{
-		m_sprite = this.GetComponent<tk2dSprite>();
-	}
-
-	private void OnClicked ()
+		Pass,
+		Submit,
+	};
+	
+	public class MGButton : MonoBehaviour 
 	{
-		this.OnTriggerAction.Invoke(this);
-	}
+		[SerializeField] private EButton m_button;
+		[SerializeField] private bool m_isEnabled;
+		[SerializeField] private tk2dTextMesh m_txtLabel;
+		[SerializeField] private string m_label;
 
-	public EButton Button { get { return m_button; } }
+		public Signal OnTriggerAction = new Signal(typeof(MGButton));
 
-	public bool IsEnabled 
-	{
-		get { return m_isEnabled; }
-		set 
-		{ 
-			m_isEnabled = value;
-
-			if (!m_isEnabled)
-			{
-				m_sprite.color = Color.gray;
-			}
-			else
-			{
-				m_sprite.color = Color.white;
-			}
+		private void Awake ()
+		{
+			this.Assert<tk2dTextMesh>(m_txtLabel, "m_txtLabel is null!");
+			m_txtLabel.text = m_label;
 		}
+
+		private void OnClicked ()
+		{
+			this.OnTriggerAction.Invoke(this);
+		}
+
+		public EButton Button { get { return m_button; } }
 	}
 }

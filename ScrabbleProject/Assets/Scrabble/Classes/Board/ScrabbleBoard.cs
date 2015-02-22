@@ -8,6 +8,7 @@ namespace Board
 	using Ext;
 	using Events;
 	using Model;
+	using MGTools;
 
 	public class ScrabbleBoard : MonoBehaviour 
 	{
@@ -151,6 +152,27 @@ namespace Board
 
 						this.EnableNeighbors();
 					}
+				}
+				break;
+			}
+		}
+
+		[Signal]
+		private void OnPressedButton (MGButton p_button)
+		{
+			this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton Button:{0}", p_button.Button);
+			EButton button = p_button.Button;
+
+			switch (button)
+			{
+				case EButton.Pass:
+				{
+					
+				}
+				break;
+
+				case EButton.Submit:
+				{
 				}
 				break;
 			}
