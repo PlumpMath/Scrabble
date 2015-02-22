@@ -331,6 +331,7 @@ namespace Model
 
 		public static ETileType[,] m_boardMap = new ETileType[15, 15]
 		{
+																											    ////////////
 			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
 			{ ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK },
 			{ ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK },
@@ -346,6 +347,7 @@ namespace Model
 			{ ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK },
 			{ ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK },
 			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
+																												////////////
 		};
 
 		public int LetterPoints (ELetter p_letter)
