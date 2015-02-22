@@ -26,7 +26,6 @@ namespace Board
 			m_letterViews = new List<Letter>();
 
 			// test add dummy letter
-			/*
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
@@ -34,7 +33,6 @@ namespace Board
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
-			*/
 
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}

@@ -318,7 +318,6 @@ namespace Model
 
 		public int LetterCount (ELetter p_letter)
 		{
-			this.Log(Tags.Log, "BOARD::LetterCount p_letter:{0}", p_letter);
 			return m_letterCount[p_letter];
 		}
 

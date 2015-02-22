@@ -17,7 +17,7 @@ namespace Board
 		private Predicate<Tile> OCCUPIED = new Predicate<Tile>(t => t.TileModel.Letter != null);
 
 		[SerializeField] private Tile m_tile;
-		[SerializeField] private Tile[,] m_tileGrid;
+		private Tile[,] m_tileGrid;
 		private List<Tile> m_tiles;
 		private Model m_model;
 
@@ -103,22 +103,56 @@ namespace Board
 					Vector2 newPos = new Vector2(pos.x, pos.y);
 					Letter letter = drop.Data<Letter>(DropEvent.LETTER);
 
-					//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
-					
 					List<Tile> activeTiles = m_tiles.FindAll(ACTIVE);
 					bool snapped = false;
 					
+					//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1} Tiles:{2}", pos, letter, activeTiles.Count);
+					
+					foreach (Tile tile in activeTiles)
+					{
+						//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent ActiveTiles Row:{0} Col:{1}", tile.TileModel.Row, tile.TileModel.Col);	
+
+						//bool contains = tile.Rect.Contains(newPos);
+						// +AS:02222015 Note: For some reason, min and size has the correct values. so we used them instead.
+						Rect rect = tile.Rect;
+						bool contains = rect.min.x <= newPos.x &&
+										rect.min.y <= newPos.y &&
+										rect.size.x >= newPos.x &&
+										rect.size.y >= newPos.y;
+						
+						// debug 7x9
+						if (tile.TileModel.Row == 7 
+						&&	tile.TileModel.Col == 9
+						) {
+							this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop ActiveTiles min:{0} max:{1}", rect.min, rect.max);
+							this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop ActiveTiles center:{0} size:{1}", rect.center, rect.size);
+							this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop ActiveTiles Row:{0} Col:{1} IsActive:{2} Rect:{3} Pos:{4} Contains:{5}", tile.TileModel.Row, tile.TileModel.Col, tile.TileModel.IsActive, tile.Rect, newPos, contains);
+						}
+					
+						//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent ActiveTiles Row:{0} Col:{1}", tile.TileModel.Row, tile.TileModel.Col);
+					}
+
 					foreach (Tile tile in activeTiles)
 					{
 						//bool contains = tile.Rect.Contains(newPos);
+						// +AS:02222015 Note: For some reason, min and size has the correct values. so we used them instead.
 						Rect rect = tile.Rect;
-						bool contains = rect.center.x <= newPos.x &&
-										rect.center.y <= newPos.y &&
+						bool contains = rect.min.x <= newPos.x &&
+										rect.min.y <= newPos.y &&
 										rect.size.x >= newPos.x &&
 										rect.size.y >= newPos.y;
+					
+						// debug 7x9
+						if (tile.TileModel.Row == 7 
+					    &&	tile.TileModel.Col == 9
+					   	) {
+							//this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop Row:{0} Col:{1} IsActive:{2} Rect:{3} Pos:{4} Contains:{5}", tile.TileModel.Row, tile.TileModel.Col, tile.TileModel.IsActive, tile.Rect, newPos, contains);
+						}
 
 						if (contains)
 						{
+							//this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop Row:{0} Col:{1} IsActive:{2} Rect:{3} Pos:{4}", tile.TileModel.Row, tile.TileModel.Col, tile.TileModel.IsActive, tile.Rect, newPos);
+						
 							// if letter is already placed on a tile, unsnap it!
 							if (letter.Tile != null)
 							{
@@ -127,7 +161,7 @@ namespace Board
 							// snap the tile!
 							else
 							{
-								this.Log(Tags.Log, "Snap!");
+								//this.Log(Tags.Log, "Snap!");
 								snapped = true;
 								
 								// TODO: Trigger Snapping
@@ -141,10 +175,6 @@ namespace Board
 
 								break;
 							}
-						}
-						else
-						{
-							this.Log(Tags.Log, "ScrabbleBoard::OnEventListener OnDrop Row:{0} Col:{1} IsActive:{2} Rect:{3} Pos:{4}", tile.TileModel.Row, tile.TileModel.Col, tile.TileModel.IsActive, tile.Rect, newPos);
 						}
 					}
 
@@ -219,7 +249,8 @@ namespace Board
 					int nRow = p_tile.TileModel.Row + row;
 					int nCol = p_tile.TileModel.Col + col;
 
-					if (nRow < 0 || nCol > BOARD.BOARD_COLS - 1) { continue; }
+					if (nRow < 0 || nRow > BOARD.BOARD_COLS - 1) { continue; }
+					if (nCol < 0 || nCol > BOARD.BOARD_COLS - 1) { continue; }
 
 					Tile tile = m_tileGrid[nRow, nCol];
 
