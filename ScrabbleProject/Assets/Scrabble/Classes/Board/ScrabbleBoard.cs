@@ -424,6 +424,13 @@ namespace Board
 					totalWordPoints += letterPoints;
 				}
 
+				// +50 Bonus points for 7 letter word
+				if (p_points.Count >= 7)
+				{
+					this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Scrabble! +50 pts Word:{0} Score:{1} NewScore:{2}", p_word, totalWordPoints, totalWordPoints + 50);
+					totalWordPoints += 50;
+				}
+
 				// check for word multiplier
 				foreach (KeyValuePair<ETileType, int> pair in twdlCount)
 				{

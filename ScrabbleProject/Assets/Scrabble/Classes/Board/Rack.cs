@@ -57,7 +57,7 @@ namespace Board
 			this.CreateLetter(ELetter.B);
 			this.CreateLetter(ELetter.L);
 			this.CreateLetter(ELetter.E);
-			this.CreateLetter(ELetter.E);
+			this.CreateLetter(ELetter.S);
 
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}
