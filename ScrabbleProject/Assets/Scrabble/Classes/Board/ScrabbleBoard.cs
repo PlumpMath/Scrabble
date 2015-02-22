@@ -85,7 +85,7 @@ namespace Board
 					Vector3 pos = drop.Data<Vector3>(DropEvent.POSITION);
 					Letter letter = drop.Data<Letter>(DropEvent.LETTER);
 
-					this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
+					//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
 					
 					Predicate<Tile> filter = (Tile tile) => { return tile.IsActive; };
 					List<Tile> activeTiles = m_tiles.FindAll(filter);
