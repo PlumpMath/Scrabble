@@ -28,7 +28,7 @@ namespace Board
 
 			m_letterViews = new List<Letter>();
 
-			// test add dummy letter
+			// actual random values
 			/*
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
@@ -38,6 +38,9 @@ namespace Board
 			this.CreateLetter(Letters.Instance.Letter());
 			this.CreateLetter(Letters.Instance.Letter());
 			*/
+
+			// Debug 5 letter word
+			/*
 			this.CreateLetter(ELetter.F);
 			this.CreateLetter(ELetter.I);
 			this.CreateLetter(ELetter.R);
@@ -45,6 +48,16 @@ namespace Board
 			this.CreateLetter(ELetter.D);
 			this.CreateLetter(ELetter.A);
 			this.CreateLetter(ELetter.B);
+			*/
+
+			// Debug 7 letter word
+			this.CreateLetter(ELetter.B);
+			this.CreateLetter(ELetter.U);
+			this.CreateLetter(ELetter.B);
+			this.CreateLetter(ELetter.B);
+			this.CreateLetter(ELetter.L);
+			this.CreateLetter(ELetter.E);
+			this.CreateLetter(ELetter.E);
 
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}

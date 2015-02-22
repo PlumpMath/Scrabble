@@ -309,6 +309,16 @@ namespace Model
 			{ ETileType.ST, 		1 },
 		};
 
+		private static Dictionary<ETileType, int> m_tileMultiplier = new Dictionary<ETileType, int>()
+		{
+			{ ETileType.BK, 		1 },
+			{ ETileType.TW, 		3 },
+			{ ETileType.DW, 		2 },
+			{ ETileType.TL, 		3 },
+			{ ETileType.DL, 		2 },
+			{ ETileType.ST, 		2 },
+		};
+
 		private static Dictionary<ETileType, string> m_tileSprite = new Dictionary<ETileType, string>()
 		{
 			{ ETileType.BK, 		"tile_empty" },
@@ -356,6 +366,11 @@ namespace Model
 		public int TileCount (ETileType p_tile)
 		{
 			return m_tileCount[p_tile];
+		}
+
+		public int TileMultiplier (ETileType p_tile)
+		{
+			return m_tileMultiplier[p_tile];
 		}
 
 		public string TileSprite (ETileType p_tile)
