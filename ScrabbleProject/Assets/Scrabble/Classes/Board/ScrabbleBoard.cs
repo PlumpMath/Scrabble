@@ -9,6 +9,7 @@ namespace Board
 	using Events;
 	using Model;
 	using MGTools;
+	using MiniJSON;
 
 	public class ScrabbleBoard : MonoBehaviour 
 	{
@@ -188,9 +189,10 @@ namespace Board
 
 				case EButton.Submit:
 				{
-					// TODO: Add Find the Left/Top most active tile!
+					// DONE: Add Find the Left/Top most active tile!
 					//	TopMost: row-14
 					//	LeftMost: col-0
+					// TODO: Integrated nearby (1 tile distance) POccupied tile
 					List<Tile> occupiedR = m_tiles.FindAll(TOCCUPIED);
 					List<Tile> occupiedC = new List<Tile>();
 					occupiedC.AddRange(occupiedR);
@@ -215,11 +217,13 @@ namespace Board
 					if (nextToTop != null && ETileStatus.NOT_EMPTY.Has(nextToTop.Status))
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Check Vertical Word!");
+						this.CheckVerticalWord(top.TileModel.Row, top.TileModel.Col);
 					}
 					// check horizontal
 					else if (nextToLeft != null && ETileStatus.NOT_EMPTY.Has(nextToLeft.Status))
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Check Horizontal Word!");
+						this.CheckHorizontalWord(left.TileModel.Row, left.TileModel.Col);
 					}
 					// single/no letter letter
 					else
@@ -314,6 +318,151 @@ namespace Board
 			if (col < 0 || col > BOARD.BOARD_COLS - 1) { return null; }
 			
 			return m_tileGrid[row, col];
+		}
+
+		/// <summary>
+		/// Word Validation (Horizontal)
+		/// </summary>
+		private void CheckHorizontalWord (int p_row, int p_col)
+		{
+			BOARD board = Model.Instance.Board;
+			Tile tile = m_tileGrid[p_row, p_col];
+			ELetter letter = tile.TileModel.Letter.Type;
+			List<int> points = new List<int>();
+			List<ETileType> multipliers = new List<ETileType>();
+			string word = board.LetterText(letter);
+			
+			// save the initial points and multiplier
+			points.Add(board.LetterPoints(letter));
+			multipliers.Add(tile.Type);
+			
+			while (true)
+			{
+				int newCol = tile.TileModel.Col + 1;
+				tile = m_tileGrid[p_row, newCol];
+				
+				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
+				
+				word += board.LetterText(tile.TileModel.Letter.Type);
+				
+				// save the new points and multiplier
+				points.Add(board.LetterPoints(letter));
+				multipliers.Add(tile.Type);
+			}
+			
+			//this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontalWord Word:{0} IsValid:{1}", word, WordManager.Instance.IsValid(word));
+			this.ValidateWords(word, points, multipliers);
+		}
+
+		/// <summary>
+		/// Word Validation (Vertical)
+		/// </summary>
+		private void CheckVerticalWord (int p_row, int p_col)
+		{
+			BOARD board = Model.Instance.Board;
+			Tile tile = m_tileGrid[p_row, p_col];
+			ELetter letter = tile.TileModel.Letter.Type;
+			List<int> points = new List<int>();
+			List<ETileType> multipliers = new List<ETileType>();
+			string word = board.LetterText(letter);
+
+			// save the initial points and multiplier
+			points.Add(board.LetterPoints(letter));
+			multipliers.Add(tile.Type);
+			
+			while (true)
+			{
+				int newRow = tile.TileModel.Row - 1;
+				tile = m_tileGrid[newRow, p_col];
+				
+				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
+
+				letter = tile.TileModel.Letter.Type;
+				word += board.LetterText(tile.TileModel.Letter.Type);
+
+				// save the new points and multiplier
+				points.Add(board.LetterPoints(letter));
+				multipliers.Add(tile.Type);
+			}
+			
+			//this.Log(Tags.Log, "ScrabbleBoard::CheckVerticalWord Word:{0} IsValid:{1}", word, WordManager.Instance.IsValid(word));
+			this.ValidateWords(word, points, multipliers);
+		}
+
+		private void ValidateWords (string p_word, List<int> p_points, List<ETileType> p_tiles)
+		{
+			this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Word:{0} Points:{1} Tiles{2}", p_word, Json.Serialize(p_points), Json.Serialize(p_tiles));
+
+			BOARD board = Model.Instance.Board;
+			int totalWordPoints = 0;
+			bool isValid = WordManager.Instance.IsValid(p_word);
+			Dictionary<ETileType, int> twdlCount = new Dictionary<ETileType, int>();
+			twdlCount.Add(ETileType.DW, 0);
+			twdlCount.Add(ETileType.TW, 0);
+
+			bool isScrabble = false;
+			Dictionary<ETileType, bool> wordModifiers = new Dictionary<ETileType, bool>()
+			{
+				{ ETileType.DL, false },
+				{ ETileType.TL, false },
+				{ ETileType.DW, false },
+				{ ETileType.TW, false },
+			};
+
+			// calculate points
+			if (isValid)
+			{
+				for (int i = 0;  i < p_points.Count; i++)
+				{
+					ETileType tileType = p_tiles[i];
+					int letterPoints = p_points[i];
+
+					// update word modifiers
+					if (wordModifiers.ContainsKey(tileType))
+					{
+						wordModifiers[tileType] = true;
+					}
+
+					// contains word score multiplier
+					if (twdlCount.ContainsKey(tileType))
+					{
+						int count = twdlCount[tileType];
+						count++;
+						twdlCount[tileType] = count;
+					}
+					// letter multiplier and score
+					else
+					{
+						letterPoints *= board.TileMultiplier(tileType);
+					}
+
+					totalWordPoints += letterPoints;
+				}
+
+				// check for word multiplier
+				foreach (KeyValuePair<ETileType, int> pair in twdlCount)
+				{
+					if (pair.Value > 0)
+					{
+						totalWordPoints *= board.TileMultiplier(pair.Key);
+					}
+				}
+
+				// +50 Bonus points for 7 letter word
+				if (p_points.Count >= 7)
+				{
+					this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Scrabble! +50 pts Word:{0} Score:{1} NewScore:{2}", p_word, totalWordPoints, totalWordPoints + 50);
+					totalWordPoints += 50;
+					isScrabble = true;
+				}
+
+				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords VALID Word:{0} Score:{1}", p_word, totalWordPoints);
+				ScrabbleEvent.Instance.Trigger(EEvents.OnScoreComputed, new ScoreEvent(totalWordPoints, wordModifiers, isScrabble));
+			}
+			else
+			{
+				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Invalid word! Word:{0}", p_word);
+			}
 		}
 	}
 }

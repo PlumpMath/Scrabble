@@ -40,6 +40,15 @@ namespace Events
 		/// Button PASS is pressed
 		/// </summary>
 		OnPressedPass = 0x1 << 3,
+
+		/// <summary>
+		/// A Score is computed!
+		/// Score Data
+		/// 	- Score (int)
+		/// 	- Multipliers (Dictionary<Multiplier, Count>)
+		/// 	- IsScrabble (bool)
+		/// </summary>
+		OnScoreComputed = 0x1 << 4,
 	}; 
 
 	public class ScrabbleEvent

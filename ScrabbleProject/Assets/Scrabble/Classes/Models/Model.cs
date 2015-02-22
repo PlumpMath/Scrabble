@@ -89,7 +89,14 @@ namespace Model
 		POccupied	= 0x1 << 3, // A word is validated with in this tile
 		Max			= 0x1 << 4,
 
+		/// <summary>
+		/// Empty | Occupied | POccupied
+		/// </summary>
 		NOT_ACTIVE	= Empty | Occupied | POccupied,
+
+		/// <summary>
+		/// Occupied | POccupied
+		/// </summary>
 		NOT_EMPTY	= Occupied | POccupied,
 	};
 
@@ -302,6 +309,16 @@ namespace Model
 			{ ETileType.ST, 		1 },
 		};
 
+		private static Dictionary<ETileType, int> m_tileMultiplier = new Dictionary<ETileType, int>()
+		{
+			{ ETileType.BK, 		1 },
+			{ ETileType.TW, 		3 },
+			{ ETileType.DW, 		2 },
+			{ ETileType.TL, 		3 },
+			{ ETileType.DL, 		2 },
+			{ ETileType.ST, 		2 },
+		};
+
 		private static Dictionary<ETileType, string> m_tileSprite = new Dictionary<ETileType, string>()
 		{
 			{ ETileType.BK, 		"tile_empty" },
@@ -314,6 +331,7 @@ namespace Model
 
 		public static ETileType[,] m_boardMap = new ETileType[15, 15]
 		{
+																											    ////////////
 			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
 			{ ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK },
 			{ ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK },
@@ -329,6 +347,7 @@ namespace Model
 			{ ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK },
 			{ ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK },
 			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
+																												////////////
 		};
 
 		public int LetterPoints (ELetter p_letter)
@@ -349,6 +368,11 @@ namespace Model
 		public int TileCount (ETileType p_tile)
 		{
 			return m_tileCount[p_tile];
+		}
+
+		public int TileMultiplier (ETileType p_tile)
+		{
+			return m_tileMultiplier[p_tile];
 		}
 
 		public string TileSprite (ETileType p_tile)
