@@ -90,6 +90,7 @@ namespace Model
 		Max			= 0x1 << 4,
 
 		NOT_ACTIVE	= Empty | Occupied | POccupied,
+		NOT_EMPTY	= Occupied | POccupied,
 	};
 
 	public sealed class Model

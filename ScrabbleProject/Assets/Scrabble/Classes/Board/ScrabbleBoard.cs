@@ -14,7 +14,10 @@ namespace Board
 	{
 		// Filters
 		private Predicate<Tile> ACTIVE = new Predicate<Tile>(t => t.TileModel.Status == ETileStatus.Open);
-		private Predicate<Tile> OCCUPIED = new Predicate<Tile>(t => t.TileModel.Letter != null);
+		/// <summary>
+		/// OCCUPIED | POCCUPIED
+		/// </summary>
+		private Predicate<Tile> OCCUPIED = new Predicate<Tile>(t => ETileStatus.NOT_EMPTY.Has(t.Status));
 
 		[SerializeField] private Tile m_tile;
 		private Tile[,] m_tileGrid;
@@ -177,6 +180,7 @@ namespace Board
 
 				case EButton.Submit:
 				{
+					// TODO: Add Find the Left/Top most active tile!
 				}
 				break;
 			}
@@ -204,7 +208,7 @@ namespace Board
 			{
 				for (int col = -1; col < 2; col++)
 				{
-					// blocked tiles
+					// blocked tiles (center, TL, TR, BL, BR)
 					if (row == 0 && col == 0) { continue; }
 					if (row == 1 && col == 1) { continue; }
 					if (row == -1 && col == -1) { continue; }
@@ -214,6 +218,7 @@ namespace Board
 					int nRow = p_tile.TileModel.Row + row;
 					int nCol = p_tile.TileModel.Col + col;
 
+					// blocked out of bounds
 					if (nRow < 0 || nRow > BOARD.BOARD_COLS - 1) { continue; }
 					if (nCol < 0 || nCol > BOARD.BOARD_COLS - 1) { continue; }
 
