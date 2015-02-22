@@ -119,19 +119,28 @@ namespace Board
 
 						if (contains)
 						{
-							this.Log(Tags.Log, "Snap!");
-							snapped = true;
-							
-							// TODO: Trigger Snapping
-							ScrabbleEvent.Instance.Trigger(EEvents.OnSnapped, new SnapEvent(tile, letter.Type));
-							
-							// Cleanup rack
-							ScrabbleEvent.Instance.Trigger(EEvents.OnCleanUpRack, new SnapEvent(tile, letter.Type));
+							// if letter is already placed on tile, unsnap it!
+							if (letter.Tile != null)
+							{
+								break;
+							}
+							// snap the tile!
+							else
+							{
+								this.Log(Tags.Log, "Snap!");
+								snapped = true;
+								
+								// TODO: Trigger Snapping
+								ScrabbleEvent.Instance.Trigger(EEvents.OnSnapped, new SnapEvent(tile, letter.Type));
+								
+								// Cleanup rack
+								ScrabbleEvent.Instance.Trigger(EEvents.OnCleanUpRack, new SnapEvent(tile, letter.Type));
 
-							// TODO: Trigger active neighbor tiles!
-							this.EnableNeighbors();
+								// TODO: Trigger active neighbor tiles!
+								this.EnableNeighbors();
 
-							break;
+								break;
+							}
 						}
 						else
 						{
