@@ -11,6 +11,10 @@ namespace Board
 
 	public class ScrabbleBoard : MonoBehaviour 
 	{
+		// Filters
+		private Predicate<Tile> ACTIVE = new Predicate<Tile>(t => t.TileModel.IsActive == true);
+		private Predicate<Tile> OCCUPIED = new Predicate<Tile>(t => t.TileModel.Letter != null);
+
 		[SerializeField] private Tile m_tile;
 		[SerializeField] private Tile[,] m_tileGrid;
 		private List<Tile> m_tiles;
@@ -100,8 +104,7 @@ namespace Board
 
 					//this.Log(Tags.Log, "Scrabble::OnEventListened DropEvent OnPos:{0} Letter:{1}", pos, letter);
 					
-					Predicate<Tile> filter = (Tile tile) => { return tile.IsActive; };
-					List<Tile> activeTiles = m_tiles.FindAll(filter);
+					List<Tile> activeTiles = m_tiles.FindAll(ACTIVE);
 					bool snapped = false;
 					
 					foreach (Tile tile in activeTiles)
@@ -158,30 +161,11 @@ namespace Board
 			// deactivate inactive tiles
 			this.DisableNeighbors();
 
-			Predicate<Tile> filter = (Tile tile) => { return tile.TileModel.Letter != null; };
-			List<Tile> occupiedTiles = m_tiles.FindAll(filter);
+			List<Tile> occupiedTiles = m_tiles.FindAll(OCCUPIED);
 
 			foreach (Tile tile in occupiedTiles)
 			{
 				this.EnableNeighbors(tile.TileModel.Row, tile.TileModel.Col, tile);
-			}
-		}
-
-		private void DisableNeighbors ()
-		{
-			foreach (Tile tile in m_tiles)
-			{
-				if (tile.TileModel.Letter == null)
-				{
-					tile.Deactivate();
-				}
-			}
-
-			// initial tile
-			Tile initTile = m_tileGrid[m_model.Default.Row, m_model.Default.Col];
-			if (initTile.TileModel.Letter == null)
-			{
-				initTile.Activate();
 			}
 		}
 
@@ -214,6 +198,24 @@ namespace Board
 						tile.Activate();
 					}
 				}
+			}
+		}
+
+		private void DisableNeighbors ()
+		{
+			foreach (Tile tile in m_tiles)
+			{
+				if (tile.TileModel.Letter == null)
+				{
+					tile.Deactivate();
+				}
+			}
+			
+			// initial tile
+			Tile initTile = m_tileGrid[m_model.Default.Row, m_model.Default.Col];
+			if (initTile.TileModel.Letter == null)
+			{
+				initTile.Activate();
 			}
 		}
 	}
