@@ -9,6 +9,9 @@ namespace Board
 	using Ext;
 	using Model;
 
+	/// <summary>
+	/// Bug: Double letter on 2nd placing
+	/// </summary>
 	public class Rack : MonoBehaviour 
 	{
 		public static readonly int RACK_LIMIT = 7;
@@ -148,6 +151,14 @@ namespace Board
 
 				case EEvents.OnPressedPass:
 				{
+					// test clear letters
+					while (m_letters.Count > 0)
+					{
+						Letter letter = m_letterViews[0];
+						this.RemoveLetter(m_letters[0]);
+						GameObject.Destroy(letter.gameObject);
+					}
+
 					int limit = (RACK_LIMIT - m_letters.Count);
 					this.Log(Tags.Log, "Rack::OnEventListened OnPressedPass limit:{0}", limit);
 					

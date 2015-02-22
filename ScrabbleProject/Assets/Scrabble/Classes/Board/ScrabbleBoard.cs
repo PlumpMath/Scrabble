@@ -18,6 +18,14 @@ namespace Board
 		/// OCCUPIED | POCCUPIED
 		/// </summary>
 		private Predicate<Tile> OCCUPIED = new Predicate<Tile>(t => ETileStatus.NOT_EMPTY.Has(t.Status));
+		/// <summary>
+		/// Temp occupied. OCCUPIED
+		/// </summary>
+		private Predicate<Tile> TOCCUPIED = new Predicate<Tile>(t => t.Status == ETileStatus.Occupied);
+		/// <summary>
+		/// Permanently occupied. POCCUPIED
+		/// </summary>
+		private Predicate<Tile> POCCUPIED = new Predicate<Tile>(t => t.Status == ETileStatus.POccupied);
 
 		[SerializeField] private Tile m_tile;
 		private Tile[,] m_tileGrid;
@@ -167,7 +175,7 @@ namespace Board
 		[Signal]
 		private void OnPressedButton (MGButton p_button)
 		{
-			this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton Button:{0}", p_button.Button);
+			//this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton Button:{0}", p_button.Button);
 			EButton button = p_button.Button;
 
 			switch (button)
@@ -181,6 +189,43 @@ namespace Board
 				case EButton.Submit:
 				{
 					// TODO: Add Find the Left/Top most active tile!
+					//	TopMost: row-14
+					//	LeftMost: col-0
+					List<Tile> occupiedR = m_tiles.FindAll(TOCCUPIED);
+					List<Tile> occupiedC = new List<Tile>();
+					occupiedC.AddRange(occupiedR);
+					
+					if (occupiedC.Count <= 0 || occupiedR.Count <= 0)
+					{
+						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT No letters to check!");
+						return;
+					}
+
+					// sort the tiles
+					occupiedR.Sort(new SortTileR(Sort.Descending));
+					occupiedC.Sort(new SortTileC(Sort.Ascending)); 
+
+					// top to bottom
+					Tile top = occupiedR[0];
+					Tile left = occupiedC[0];
+					Tile nextToTop = this.TileBotOf(top);
+					Tile nextToLeft = this.TileRightOf(left);
+
+					// check verticale
+					if (nextToTop != null && ETileStatus.NOT_EMPTY.Has(nextToTop.Status))
+					{
+						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Check Vertical Word!");
+					}
+					// check horizontal
+					else if (nextToLeft != null && ETileStatus.NOT_EMPTY.Has(nextToLeft.Status))
+					{
+						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Check Horizontal Word!");
+					}
+					// single/no letter letter
+					else
+					{
+						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Single letter!");
+					}
 				}
 				break;
 			}
@@ -219,7 +264,7 @@ namespace Board
 					int nCol = p_tile.TileModel.Col + col;
 
 					// blocked out of bounds
-					if (nRow < 0 || nRow > BOARD.BOARD_COLS - 1) { continue; }
+					if (nRow < 0 || nRow > BOARD.BOARD_ROWS - 1) { continue; }
 					if (nCol < 0 || nCol > BOARD.BOARD_COLS - 1) { continue; }
 
 					Tile tile = m_tileGrid[nRow, nCol];
@@ -249,6 +294,26 @@ namespace Board
 			{
 				initTile.Activate();
 			}
+		}
+		
+		private Tile TileBotOf (Tile p_tile)
+		{
+			int row = p_tile.TileModel.Row-1;
+			int col = p_tile.TileModel.Col;
+
+			if (row < 0 || row > BOARD.BOARD_COLS - 1) { return null; }
+
+			return m_tileGrid[row, col];
+		}
+
+		private Tile TileRightOf (Tile p_tile)
+		{
+			int row = p_tile.TileModel.Row;
+			int col = p_tile.TileModel.Col+1;
+			
+			if (col < 0 || col > BOARD.BOARD_COLS - 1) { return null; }
+			
+			return m_tileGrid[row, col];
 		}
 	}
 }
