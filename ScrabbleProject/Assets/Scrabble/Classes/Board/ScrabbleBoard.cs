@@ -188,9 +188,10 @@ namespace Board
 
 				case EButton.Submit:
 				{
-					// TODO: Add Find the Left/Top most active tile!
+					// DONE: Add Find the Left/Top most active tile!
 					//	TopMost: row-14
 					//	LeftMost: col-0
+					// TODO: Integrated nearby (1 tile distance) POccupied tile
 					List<Tile> occupiedR = m_tiles.FindAll(TOCCUPIED);
 					List<Tile> occupiedC = new List<Tile>();
 					occupiedC.AddRange(occupiedR);
@@ -215,11 +216,13 @@ namespace Board
 					if (nextToTop != null && ETileStatus.NOT_EMPTY.Has(nextToTop.Status))
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Check Vertical Word!");
+						this.CheckVerticalWord(top.TileModel.Row, top.TileModel.Col);
 					}
 					// check horizontal
 					else if (nextToLeft != null && ETileStatus.NOT_EMPTY.Has(nextToLeft.Status))
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Check Horizontal Word!");
+						this.CheckHorizontalWord(left.TileModel.Row, left.TileModel.Col);
 					}
 					// single/no letter letter
 					else
@@ -314,6 +317,50 @@ namespace Board
 			if (col < 0 || col > BOARD.BOARD_COLS - 1) { return null; }
 			
 			return m_tileGrid[row, col];
+		}
+
+		/// <summary>
+		/// Word Validation (Horizontal)
+		/// </summary>
+		private void CheckHorizontalWord (int p_row, int p_col)
+		{
+			Tile tile = m_tileGrid[p_row, p_col];
+
+			string word = Model.Instance.Board.LetterText(tile.TileModel.Letter.Type);
+
+			while (true)
+			{
+				int newCol = tile.TileModel.Col + 1;
+				tile = m_tileGrid[p_row, newCol];
+
+				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
+
+				word += Model.Instance.Board.LetterText(tile.TileModel.Letter.Type);
+			}
+
+			this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontal Word:{0}", word);
+		}
+
+		/// <summary>
+		/// Word Validation (Vertical)
+		/// </summary>
+		private void CheckVerticalWord (int p_row, int p_col)
+		{
+			Tile tile = m_tileGrid[p_row, p_col];
+			
+			string word = Model.Instance.Board.LetterText(tile.TileModel.Letter.Type);
+			
+			while (true)
+			{
+				int newRow = tile.TileModel.Row + 1;
+				tile = m_tileGrid[newRow, p_col];
+				
+				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
+				
+				word += Model.Instance.Board.LetterText(tile.TileModel.Letter.Type);
+			}
+			
+			this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontal Word:{0}", word);
 		}
 	}
 }

@@ -89,7 +89,14 @@ namespace Model
 		POccupied	= 0x1 << 3, // A word is validated with in this tile
 		Max			= 0x1 << 4,
 
+		/// <summary>
+		/// Empty | Occupied | POccupied
+		/// </summary>
 		NOT_ACTIVE	= Empty | Occupied | POccupied,
+
+		/// <summary>
+		/// Occupied | POccupied
+		/// </summary>
 		NOT_EMPTY	= Occupied | POccupied,
 	};
 
