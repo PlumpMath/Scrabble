@@ -12,6 +12,7 @@ namespace Board
 		[SerializeField] private tk2dSlicedSprite m_skin; 
 		[SerializeField] private tk2dTextMesh m_txtText;
 		[SerializeField] private tk2dTextMesh m_txtPoints;
+		[SerializeField] private Tile m_snapped;
 		[SerializeField] private Vector3 m_originalPos;
 		private Model m_model;
 
@@ -41,7 +42,11 @@ namespace Board
 			private set { m_letter = value; }
 		}
 
-		public Tile Tile { get; set; }
+		public Tile Tile 
+		{ 
+			get { return m_snapped; }
+			set { m_snapped = value; }
+		}
 
 		public void UpdateLetter (ELetter p_type)
 		{

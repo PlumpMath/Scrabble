@@ -352,7 +352,7 @@ namespace Board
 			
 			while (true)
 			{
-				int newRow = tile.TileModel.Row + 1;
+				int newRow = tile.TileModel.Row - 1;
 				tile = m_tileGrid[newRow, p_col];
 				
 				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
