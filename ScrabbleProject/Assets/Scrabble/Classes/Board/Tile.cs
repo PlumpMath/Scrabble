@@ -7,6 +7,7 @@ namespace Board
 	using Ext;
 	using Events;
 	using Model;
+	using MGTools;
 
 	public class Tile : MonoBehaviour
 	{
@@ -123,6 +124,14 @@ namespace Board
 			this.TileModel = model;
 			//m_skin.color = Color.gray;
 			m_active.gameObject.SetActive(false);
+		}
+
+		public void Occupied ()
+		{
+			TileModel model = this.TileModel;
+			model.Status = ETileStatus.POccupied;
+			this.TileModel = model;
+			GameObject.Destroy(model.Letter.GetComponent<MGDraggable>());
 		}
 
 		private void UpdateSkin ()

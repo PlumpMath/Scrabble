@@ -173,6 +173,18 @@ namespace Board
 					}
 				}
 				break;
+
+				case EEvents.OnPOccupiedTiles:
+				{
+					OccupiedEvent occupied = (OccupiedEvent)p_data;
+					List<Tile> tiles = occupied.Data<List<Tile>>(OccupiedEvent.TILES);
+
+					foreach (Tile tile in tiles)
+					{
+						tile.Occupied();
+					}
+				}
+				break;
 			}
 		}
 
@@ -333,11 +345,13 @@ namespace Board
 			ELetter letter = tile.TileModel.Letter.Type;
 			List<int> points = new List<int>();
 			List<ETileType> multipliers = new List<ETileType>();
+			List<Tile> tiles = new List<Tile>();
 			string word = board.LetterText(letter);
 			
 			// save the initial points and multiplier
 			points.Add(board.LetterPoints(letter));
 			multipliers.Add(tile.Type);
+			tiles.Add(tile);
 			
 			while (true)
 			{
@@ -351,10 +365,11 @@ namespace Board
 				// save the new points and multiplier
 				points.Add(board.LetterPoints(letter));
 				multipliers.Add(tile.Type);
+				tiles.Add(tile);
 			}
 			
 			//this.Log(Tags.Log, "ScrabbleBoard::CheckHorizontalWord Word:{0} IsValid:{1}", word, WordManager.Instance.IsValid(word));
-			this.ValidateWords(word, points, multipliers);
+			this.ValidateWords(word, points, multipliers, tiles);
 		}
 
 		/// <summary>
@@ -367,11 +382,13 @@ namespace Board
 			ELetter letter = tile.TileModel.Letter.Type;
 			List<int> points = new List<int>();
 			List<ETileType> multipliers = new List<ETileType>();
+			List<Tile> tiles = new List<Tile>();
 			string word = board.LetterText(letter);
 
 			// save the initial points and multiplier
 			points.Add(board.LetterPoints(letter));
 			multipliers.Add(tile.Type);
+			tiles.Add(tile);
 			
 			while (true)
 			{
@@ -386,15 +403,20 @@ namespace Board
 				// save the new points and multiplier
 				points.Add(board.LetterPoints(letter));
 				multipliers.Add(tile.Type);
+				tiles.Add(tile);
 			}
 			
 			//this.Log(Tags.Log, "ScrabbleBoard::CheckVerticalWord Word:{0} IsValid:{1}", word, WordManager.Instance.IsValid(word));
-			this.ValidateWords(word, points, multipliers);
+			this.ValidateWords(word, points, multipliers, tiles);
 		}
 
-		private void ValidateWords (string p_word, List<int> p_points, List<ETileType> p_tiles)
-		{
-			this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Word:{0} Points:{1} Tiles{2}", p_word, Json.Serialize(p_points), Json.Serialize(p_tiles));
+		private void ValidateWords (
+			string p_word, 
+			List<int> p_points, 
+			List<ETileType> p_tileTypes,
+			List<Tile> p_tiles
+		) {
+			this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Word:{0} Points:{1} Tiles{2}", p_word, Json.Serialize(p_points), Json.Serialize(p_tileTypes));
 
 			BOARD board = Model.Instance.Board;
 			int totalWordPoints = 0;
@@ -417,7 +439,7 @@ namespace Board
 			{
 				for (int i = 0;  i < p_points.Count; i++)
 				{
-					ETileType tileType = p_tiles[i];
+					ETileType tileType = p_tileTypes[i];
 					int letterPoints = p_points[i];
 
 					// update word modifiers
@@ -461,6 +483,9 @@ namespace Board
 
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords VALID Word:{0} Score:{1}", p_word, totalWordPoints);
 				ScrabbleEvent.Instance.Trigger(EEvents.OnScoreComputed, new ScoreEvent(totalWordPoints, wordModifiers, isScrabble));
+
+				// Not trigger occupied tiles!
+				ScrabbleEvent.Instance.Trigger(EEvents.OnPOccupiedTiles, new OccupiedEvent(p_tiles));
 			}
 			else if (isValid == WordStatus.Used)
 			{
