@@ -174,14 +174,15 @@ namespace Board
 				case EEvents.OnPressedPass:
 				{
 					// test clear letters
+					/*
 					while (m_letters.Count > 0)
 					{
 						Letter letter = m_letterViews[0];
 						this.RemoveLetter(m_letters[0]);
 						GameObject.Destroy(letter.gameObject);
 					}
+					*/
 					
-					/*
 					int limit = (RACK_LIMIT - m_letters.Count);
 					this.Log(Tags.Log, "Rack::OnEventListened OnPressedPass limit:{0}", limit);
 					
@@ -192,16 +193,6 @@ namespace Board
 							this.CreateLetter(Letters.Instance.Letter());
 						}
 					}
-					*/
-
-					// debug word
-					this.CreateLetter(ELetter.B);
-					this.CreateLetter(ELetter.E);
-					this.CreateLetter(ELetter.E);
-					this.CreateLetter(ELetter.I);
-					this.CreateLetter(ELetter.S);
-					this.CreateLetter(ELetter.D);
-					this.CreateLetter(ELetter.T);
 				}
 				break;
 			}
