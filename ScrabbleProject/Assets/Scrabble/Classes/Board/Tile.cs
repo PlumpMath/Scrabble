@@ -155,7 +155,7 @@ namespace Board
 					if (tile.TileModel.Row == m_tileModel.Row
 				    &&	tile.TileModel.Col == m_tileModel.Col
 				   	) {
-						this.Log(Tags.Log, "Tile::OnEventListened Tile:{0} Letter:{1}", tile, letter);
+						//this.Log(Tags.Log, "Tile::OnEventListened Tile:{0} Letter:{1}", tile, letter);
 						letter.transform.position = this.transform.position;
 						letter.transform.localScale = new Vector3(BOARD.TILE_OFFSET, BOARD.TILE_OFFSET, 0f);
 						m_tileModel.Letter = letter;

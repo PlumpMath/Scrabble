@@ -205,8 +205,8 @@ namespace Board
 				case EButton.Submit:
 				{
 					// DONE: Add Find the Left/Top most active tile!
-					//	TopMost: row-14
-					//	LeftMost: col-0
+					//	TopMost: row-14 (++ = up, -- = down)
+					//	LeftMost: col-0 (++ = right, -- = left)
 					// TODO: Integrate nearby (1 tile distance) POccupied tile
 					List<Tile> occupiedR = m_tiles.FindAll(TOCCUPIED);
 					List<Tile> occupiedC = new List<Tile>();
@@ -340,6 +340,9 @@ namespace Board
 		/// </summary>
 		private void CheckHorizontalWord (int p_row, int p_col)
 		{
+			// check for neighbor POccupiedLetters
+			this.CheckPOccupiedH(ref p_row, ref p_col);
+
 			BOARD board = Model.Instance.Board;
 			Tile tile = m_tileGrid[p_row, p_col];
 			ELetter letter = tile.TileModel.Letter.Type;
@@ -359,7 +362,8 @@ namespace Board
 				tile = m_tileGrid[p_row, newCol];
 				
 				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
-				
+
+				letter = tile.TileModel.Letter.Type;
 				word += board.LetterText(tile.TileModel.Letter.Type);
 				
 				// save the new points and multiplier
@@ -372,11 +376,37 @@ namespace Board
 			this.ValidateWords(word, points, multipliers, tiles);
 		}
 
+		private void CheckPOccupiedH (ref int p_row, ref int p_col)
+		{
+			for (int i = 0; i < 15; i++)
+			{
+				p_col = (p_col - 1);
+				
+				if (p_col < 0 || p_col > BOARD.BOARD_ROWS - 1) 
+				{ 
+					p_col = (p_col + 1);
+					break; 
+				}
+				
+				Tile tile = m_tileGrid[p_row, p_col];
+				
+				if (tile.Status != ETileStatus.POccupied)
+				{
+					// empty tile!
+					p_col = (p_col + 1);
+					break;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Word Validation (Vertical)
 		/// </summary>
 		private void CheckVerticalWord (int p_row, int p_col)
 		{
+			// check for neighbor POccupiedLetters
+			this.CheckPOccupiedV(ref p_row, ref p_col);
+			
 			BOARD board = Model.Instance.Board;
 			Tile tile = m_tileGrid[p_row, p_col];
 			ELetter letter = tile.TileModel.Letter.Type;
@@ -410,6 +440,29 @@ namespace Board
 			this.ValidateWords(word, points, multipliers, tiles);
 		}
 
+		private void CheckPOccupiedV (ref int p_row, ref int p_col)
+		{
+			for (int i = 0; i < 15; i++)
+			{
+				p_row = (p_row + 1);
+				
+				if (p_row < 0 || p_row > BOARD.BOARD_ROWS - 1) 
+				{ 
+					p_row = (p_row - 1);
+					break; 
+				}
+				
+				Tile tile = m_tileGrid[p_row, p_col];
+				
+				if (tile.Status != ETileStatus.POccupied)
+				{
+					// empty tile!
+					p_row = (p_row - 1);
+					break;
+				}
+			}
+		}
+
 		private void ValidateWords (
 			string p_word, 
 			List<int> p_points, 
@@ -441,6 +494,14 @@ namespace Board
 				{
 					ETileType tileType = p_tileTypes[i];
 					int letterPoints = p_points[i];
+					Tile tile = p_tiles[i];
+
+					// skip borrowed letter
+					if (tile.Status == ETileStatus.POccupied)
+					{
+						this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Skipped borrowed letter! Letter:{0} Points:{1} Tile:{2}", tile.TileModel.Letter.Type, letterPoints, tileType);
+						continue;
+					}
 
 					// update word modifiers
 					if (wordModifiers.ContainsKey(tileType))
