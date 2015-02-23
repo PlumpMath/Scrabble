@@ -7,17 +7,22 @@ namespace Board
 	using Ext;
 	using Events;
 	using Model;
+	using MGTools;
 
 	public class Tile : MonoBehaviour
 	{
 		[SerializeField] private ETileType m_type;
 		[SerializeField] private tk2dSlicedSprite m_skin; 
+		[SerializeField] private tk2dSlicedSprite m_active; 
+		[SerializeField] private tk2dTextMesh m_txtType;
 		[SerializeField] private TileModel m_tileModel;
 		private Model m_model;
 
 		private void Awake ()
 		{
 			this.Assert<tk2dSlicedSprite>(m_skin, "m_skin must never be null!");
+			this.Assert<tk2dSlicedSprite>(m_active, "m_active must never be null!");
+			this.Assert<tk2dTextMesh>(m_txtType, "m_txtType must never be null!");
 
 			// Initialize default tile model
 			m_tileModel = new TileModel();
@@ -108,7 +113,8 @@ namespace Board
 			model.Letter = null;
 			model.Status = ETileStatus.Open;
 			this.TileModel = model;
-			m_skin.color = Color.white;
+			//m_skin.color = Color.white;
+			m_active.gameObject.SetActive(true);
 		}
 
 		public void Deactivate ()
@@ -116,13 +122,23 @@ namespace Board
 			TileModel model = this.TileModel;
 			model.Status = ETileStatus.Empty;
 			this.TileModel = model;
-			m_skin.color = Color.gray;
+			//m_skin.color = Color.gray;
+			m_active.gameObject.SetActive(false);
+		}
+
+		public void Occupied ()
+		{
+			TileModel model = this.TileModel;
+			model.Status = ETileStatus.POccupied;
+			this.TileModel = model;
+			GameObject.Destroy(model.Letter.GetComponent<MGDraggable>());
 		}
 
 		private void UpdateSkin ()
 		{
 			if (m_type == ETileType.Invalid) { return; }
 			m_skin.spriteId = m_skin.GetSpriteIdByName(m_model.Board.TileSprite(m_type));
+			m_txtType.text = m_model.Board.TileDisplay(m_type);
 		}
 
 		private void OnEventListened (EEvents p_type, IEventData p_data)
@@ -139,7 +155,7 @@ namespace Board
 					if (tile.TileModel.Row == m_tileModel.Row
 				    &&	tile.TileModel.Col == m_tileModel.Col
 				   	) {
-						this.Log(Tags.Log, "Tile::OnEventListened Tile:{0} Letter:{1}", tile, letter);
+						//this.Log(Tags.Log, "Tile::OnEventListened Tile:{0} Letter:{1}", tile, letter);
 						letter.transform.position = this.transform.position;
 						letter.transform.localScale = new Vector3(BOARD.TILE_OFFSET, BOARD.TILE_OFFSET, 0f);
 						m_tileModel.Letter = letter;

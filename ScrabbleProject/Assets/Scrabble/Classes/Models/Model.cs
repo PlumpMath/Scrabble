@@ -319,6 +319,16 @@ namespace Model
 			{ ETileType.ST, 		2 },
 		};
 
+		private static Dictionary<ETileType, string> m_tileDisplay = new Dictionary<ETileType, string>()
+		{
+			{ ETileType.BK, 		string.Empty },
+			{ ETileType.TW, 		"TW" },
+			{ ETileType.DW, 		"DW" },
+			{ ETileType.TL, 		"TL" },
+			{ ETileType.DL, 		"DL" },
+			{ ETileType.ST, 		string.Empty },
+		};
+
 		private static Dictionary<ETileType, string> m_tileSprite = new Dictionary<ETileType, string>()
 		{
 			{ ETileType.BK, 		"tile_empty" },
@@ -339,7 +349,7 @@ namespace Model
 			{ ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK },
 			{ ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK },
 			{ ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK },
-			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
+			{ ETileType.TW, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.ST, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.TW },
 			{ ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DL, ETileType.BK, ETileType.BK },
 			{ ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.TL, ETileType.BK },
 			{ ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.DW, ETileType.BK, ETileType.BK, ETileType.BK, ETileType.BK },
@@ -373,6 +383,11 @@ namespace Model
 		public int TileMultiplier (ETileType p_tile)
 		{
 			return m_tileMultiplier[p_tile];
+		}
+
+		public string TileDisplay (ETileType p_tile)
+		{
+			return m_tileDisplay[p_tile];
 		}
 
 		public string TileSprite (ETileType p_tile)

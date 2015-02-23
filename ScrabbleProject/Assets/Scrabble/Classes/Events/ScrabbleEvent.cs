@@ -45,10 +45,17 @@ namespace Events
 		/// A Score is computed!
 		/// Score Data
 		/// 	- Score (int)
-		/// 	- Multipliers (Dictionary<Multiplier, Count>)
+		/// 	- Multipliers (Dictionary<Multiplier, bool>)
 		/// 	- IsScrabble (bool)
 		/// </summary>
 		OnScoreComputed = 0x1 << 4,
+
+		/// <summary>
+		/// A word is validated! now, permanently occupy tiles and destroy the draggable components of letters!
+		/// Occupied Data
+		/// 	- List<tile>
+		/// </summary>
+		OnPOccupiedTiles = 0x1 << 5,
 	}; 
 
 	public class ScrabbleEvent
