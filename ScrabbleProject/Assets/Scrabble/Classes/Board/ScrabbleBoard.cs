@@ -359,6 +359,9 @@ namespace Board
 			while (true)
 			{
 				int newCol = tile.TileModel.Col + 1;
+
+				if (newCol < 0 || newCol > BOARD.BOARD_COLS - 1) { break; }
+
 				tile = m_tileGrid[p_row, newCol];
 				
 				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
@@ -423,6 +426,9 @@ namespace Board
 			while (true)
 			{
 				int newRow = tile.TileModel.Row - 1;
+
+				if (newRow < 0 || newRow > BOARD.BOARD_ROWS - 1) { break; }
+
 				tile = m_tileGrid[newRow, p_col];
 				
 				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
@@ -499,7 +505,7 @@ namespace Board
 					// skip borrowed letter
 					if (tile.Status == ETileStatus.POccupied)
 					{
-						this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Skipped borrowed letter! Letter:{0} Points:{1} Tile:{2}", tile.TileModel.Letter.Type, letterPoints, tileType);
+						this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Skip borrowed letter! Letter:{0} Points:{1} Tile:{2}", tile.TileModel.Letter.Type, letterPoints, tileType);
 						continue;
 					}
 
