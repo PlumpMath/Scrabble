@@ -12,6 +12,7 @@ namespace Board
 	{
 		[SerializeField] private ETileType m_type;
 		[SerializeField] private tk2dSlicedSprite m_skin; 
+		[SerializeField] private tk2dSlicedSprite m_active; 
 		[SerializeField] private tk2dTextMesh m_txtType;
 		[SerializeField] private TileModel m_tileModel;
 		private Model m_model;
@@ -19,6 +20,7 @@ namespace Board
 		private void Awake ()
 		{
 			this.Assert<tk2dSlicedSprite>(m_skin, "m_skin must never be null!");
+			this.Assert<tk2dSlicedSprite>(m_active, "m_active must never be null!");
 			this.Assert<tk2dTextMesh>(m_txtType, "m_txtType must never be null!");
 
 			// Initialize default tile model
@@ -110,7 +112,8 @@ namespace Board
 			model.Letter = null;
 			model.Status = ETileStatus.Open;
 			this.TileModel = model;
-			m_skin.color = Color.white;
+			//m_skin.color = Color.white;
+			m_active.gameObject.SetActive(true);
 		}
 
 		public void Deactivate ()
@@ -118,7 +121,8 @@ namespace Board
 			TileModel model = this.TileModel;
 			model.Status = ETileStatus.Empty;
 			this.TileModel = model;
-			m_skin.color = Color.gray;
+			//m_skin.color = Color.gray;
+			m_active.gameObject.SetActive(false);
 		}
 
 		private void UpdateSkin ()
