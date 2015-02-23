@@ -180,7 +180,7 @@ namespace Board
 						this.RemoveLetter(m_letters[0]);
 						GameObject.Destroy(letter.gameObject);
 					}
-
+					
 					int limit = (RACK_LIMIT - m_letters.Count);
 					this.Log(Tags.Log, "Rack::OnEventListened OnPressedPass limit:{0}", limit);
 					

@@ -45,7 +45,7 @@ namespace Events
 		/// A Score is computed!
 		/// Score Data
 		/// 	- Score (int)
-		/// 	- Multipliers (Dictionary<Multiplier, Count>)
+		/// 	- Multipliers (Dictionary<Multiplier, bool>)
 		/// 	- IsScrabble (bool)
 		/// </summary>
 		OnScoreComputed = 0x1 << 4,

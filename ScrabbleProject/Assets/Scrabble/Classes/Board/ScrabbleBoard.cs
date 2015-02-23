@@ -14,6 +14,9 @@ namespace Board
 	public class ScrabbleBoard : MonoBehaviour 
 	{
 		// Filters
+		/// <summary>
+		/// OPEN
+		/// </summary>
 		private Predicate<Tile> ACTIVE = new Predicate<Tile>(t => t.TileModel.Status == ETileStatus.Open);
 		/// <summary>
 		/// OCCUPIED | POCCUPIED
@@ -192,7 +195,7 @@ namespace Board
 					// DONE: Add Find the Left/Top most active tile!
 					//	TopMost: row-14
 					//	LeftMost: col-0
-					// TODO: Integrated nearby (1 tile distance) POccupied tile
+					// TODO: Integrate nearby (1 tile distance) POccupied tile
 					List<Tile> occupiedR = m_tiles.FindAll(TOCCUPIED);
 					List<Tile> occupiedC = new List<Tile>();
 					occupiedC.AddRange(occupiedR);
@@ -207,13 +210,13 @@ namespace Board
 					occupiedR.Sort(new SortTileR(Sort.Descending));
 					occupiedC.Sort(new SortTileC(Sort.Ascending)); 
 
-					// top to bottom
+					// top to bottom & left to right
 					Tile top = occupiedR[0];
 					Tile left = occupiedC[0];
 					Tile nextToTop = this.TileBotOf(top);
 					Tile nextToLeft = this.TileRightOf(left);
 
-					// check verticale
+					// check vertical
 					if (nextToTop != null && ETileStatus.NOT_EMPTY.Has(nextToTop.Status))
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Check Vertical Word!");
@@ -395,7 +398,7 @@ namespace Board
 
 			BOARD board = Model.Instance.Board;
 			int totalWordPoints = 0;
-			bool isValid = WordManager.Instance.IsValid(p_word);
+			WordStatus isValid = WordManager.Instance.IsValid(p_word);
 			Dictionary<ETileType, int> twdlCount = new Dictionary<ETileType, int>();
 			twdlCount.Add(ETileType.DW, 0);
 			twdlCount.Add(ETileType.TW, 0);
@@ -410,7 +413,7 @@ namespace Board
 			};
 
 			// calculate points
-			if (isValid)
+			if (isValid == WordStatus.UnUsed)
 			{
 				for (int i = 0;  i < p_points.Count; i++)
 				{
@@ -458,6 +461,10 @@ namespace Board
 
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords VALID Word:{0} Score:{1}", p_word, totalWordPoints);
 				ScrabbleEvent.Instance.Trigger(EEvents.OnScoreComputed, new ScoreEvent(totalWordPoints, wordModifiers, isScrabble));
+			}
+			else if (isValid == WordStatus.Used)
+			{
+				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Used word! Word:{0}", p_word);
 			}
 			else
 			{

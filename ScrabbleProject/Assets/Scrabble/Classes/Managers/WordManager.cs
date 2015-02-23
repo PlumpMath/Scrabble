@@ -9,6 +9,15 @@ namespace MGTools
 	using Events;
 	using Ext;
 
+	public enum WordStatus
+	{
+		Invalid = 0x0,
+		NotAWord = 0x1 << 0,
+		Used = 0x1 << 1,
+		UnUsed = 0x1 << 2,
+		Max = 0x1 << 3,
+	};
+
 	public class WordManager : MonoBehaviour 
 	{
 		public static readonly string ENGLISH = "en";
@@ -31,14 +40,29 @@ namespace MGTools
 
 			foreach (string word in words)
 			{
-				m_cachedWords.Add(word.Trim() ,true);
+				m_cachedWords.Add(word.Trim(), false);
 			}
 		}
 
-		public bool IsValid (string p_word)
+		public WordStatus IsValid (string p_word)
 		{
 			string clean = p_word.ToLower().Trim();
-			return m_cachedWords.ContainsKey(clean);
+			bool contains = m_cachedWords.ContainsKey(clean);
+
+			if (contains)
+			{
+				if (m_cachedWords[clean]) 
+				{ 
+					return WordStatus.Used; 
+				}
+				else
+				{
+					m_cachedWords[clean] = true;
+					return WordStatus.UnUsed;
+				}
+			}
+
+			return WordStatus.NotAWord;
 		}
 	}
 }
