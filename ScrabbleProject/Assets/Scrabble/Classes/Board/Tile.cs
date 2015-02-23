@@ -12,12 +12,14 @@ namespace Board
 	{
 		[SerializeField] private ETileType m_type;
 		[SerializeField] private tk2dSlicedSprite m_skin; 
+		[SerializeField] private tk2dTextMesh m_txtType;
 		[SerializeField] private TileModel m_tileModel;
 		private Model m_model;
 
 		private void Awake ()
 		{
 			this.Assert<tk2dSlicedSprite>(m_skin, "m_skin must never be null!");
+			this.Assert<tk2dTextMesh>(m_txtType, "m_txtType must never be null!");
 
 			// Initialize default tile model
 			m_tileModel = new TileModel();
@@ -123,6 +125,7 @@ namespace Board
 		{
 			if (m_type == ETileType.Invalid) { return; }
 			m_skin.spriteId = m_skin.GetSpriteIdByName(m_model.Board.TileSprite(m_type));
+			m_txtType.text = m_model.Board.TileDisplay(m_type);
 		}
 
 		private void OnEventListened (EEvents p_type, IEventData p_data)
