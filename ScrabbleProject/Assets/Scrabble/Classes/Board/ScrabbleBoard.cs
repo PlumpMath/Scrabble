@@ -124,7 +124,7 @@ namespace Board
 					foreach (Tile tile in activeTiles)
 					{
 						//bool contains = tile.Rect.Contains(newPos);
-						// +AS:02222015 Note: For some reason, min and size has the correct values. so we used them instead.
+						// 02222015 Note: For some reason, min and size has the correct values. so we used them instead.
 						Rect rect = tile.Rect;
 						bool contains = rect.min.x <= newPos.x &&
 										rect.min.y <= newPos.y &&
@@ -153,6 +153,9 @@ namespace Board
 								// TODO: Trigger active neighbor tiles!
 								this.EnableNeighbors();
 
+								// disable pass button
+								this.DisablePassButton();
+
 								break;
 							}
 						}
@@ -170,6 +173,7 @@ namespace Board
 						}
 
 						this.EnableNeighbors();
+						this.EnablePassButton();
 					}
 				}
 				break;
@@ -198,7 +202,12 @@ namespace Board
 			{
 				case EButton.Pass:
 				{
-					ScrabbleEvent.Instance.Trigger(EEvents.OnPressedPass, null);
+					List<Tile> tOccupiedTiles = m_tiles.FindAll(TOCCUPIED);
+
+					if (tOccupiedTiles.Count <= 0)
+					{
+						ScrabbleEvent.Instance.Trigger(EEvents.OnPressedPass, null);
+					}
 				}
 				break;
 
@@ -215,6 +224,11 @@ namespace Board
 					if (occupiedC.Count <= 0 || occupiedR.Count <= 0)
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT No letters to check!");
+						
+						// trigger effects
+						List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.NoLetters };
+						ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
+
 						return;
 					}
 
@@ -244,10 +258,30 @@ namespace Board
 					else
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Single letter!");
+						this.DeactivateTOccupied();
+
+						// trigger effects
+						List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.SingleLetter };
+						ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
 					}
 				}
 				break;
 			}
+		}
+
+		private void EnablePassButton ()
+		{
+			List<Tile> tOccupiedTiles = m_tiles.FindAll(TOCCUPIED);
+			
+			if (tOccupiedTiles.Count <= 0)
+			{
+				ScrabbleEvent.Instance.Trigger(EEvents.OnPassEnabled, null);
+			}
+		}
+
+		private void DisablePassButton ()
+		{
+			ScrabbleEvent.Instance.Trigger(EEvents.OnPassDisabled, null);
 		}
 
 		private void EnableNeighbors ()
@@ -262,7 +296,7 @@ namespace Board
 				this.EnableNeighbors(tile.TileModel.Row, tile.TileModel.Col, tile);
 			}
 		}
-
+		
 		/// <summary>
 		/// Flood fill (1x1 neighbor)
 		/// </summary>
@@ -359,6 +393,9 @@ namespace Board
 			while (true)
 			{
 				int newCol = tile.TileModel.Col + 1;
+
+				if (newCol < 0 || newCol > BOARD.BOARD_COLS - 1) { break; }
+
 				tile = m_tileGrid[p_row, newCol];
 				
 				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
@@ -423,6 +460,9 @@ namespace Board
 			while (true)
 			{
 				int newRow = tile.TileModel.Row - 1;
+
+				if (newRow < 0 || newRow > BOARD.BOARD_ROWS - 1) { break; }
+
 				tile = m_tileGrid[newRow, p_col];
 				
 				if (!ETileStatus.NOT_EMPTY.Has(tile.Status)) { break; }
@@ -490,6 +530,8 @@ namespace Board
 			// calculate points
 			if (isValid == WordStatus.UnUsed)
 			{
+				List<EScrabbleEffects> effects = new List<EScrabbleEffects>();
+
 				for (int i = 0;  i < p_points.Count; i++)
 				{
 					ETileType tileType = p_tileTypes[i];
@@ -499,7 +541,7 @@ namespace Board
 					// skip borrowed letter
 					if (tile.Status == ETileStatus.POccupied)
 					{
-						this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Skipped borrowed letter! Letter:{0} Points:{1} Tile:{2}", tile.TileModel.Letter.Type, letterPoints, tileType);
+						this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Skip borrowed letter! Letter:{0} Points:{1} Tile:{2}", tile.TileModel.Letter.Type, letterPoints, tileType);
 						continue;
 					}
 
@@ -507,6 +549,12 @@ namespace Board
 					if (wordModifiers.ContainsKey(tileType))
 					{
 						wordModifiers[tileType] = true;
+
+						EScrabbleEffects eff = MGEffects.EFFECTS[tileType];
+						if (!effects.Contains(eff))
+						{
+							effects.Add(eff);
+						}
 					}
 
 					// contains word score multiplier
@@ -540,22 +588,52 @@ namespace Board
 					this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Scrabble! +50 pts Word:{0} Score:{1} NewScore:{2}", p_word, totalWordPoints, totalWordPoints + 50);
 					totalWordPoints += 50;
 					isScrabble = true;
+					effects.Add(EScrabbleEffects.Scrabble);
 				}
 
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords VALID Word:{0} Score:{1}", p_word, totalWordPoints);
 				ScrabbleEvent.Instance.Trigger(EEvents.OnScoreComputed, new ScoreEvent(totalWordPoints, wordModifiers, isScrabble));
 
-				// Not trigger occupied tiles!
+				// trigger occupied tiles!
 				ScrabbleEvent.Instance.Trigger(EEvents.OnPOccupiedTiles, new OccupiedEvent(p_tiles));
+
+				// trigger effects
+				ScrabbleEvent.Instance.Trigger(EEvents.OnShowPositiveEffects, new EffectsEvent(effects));
+
+				this.EnablePassButton();
 			}
 			else if (isValid == WordStatus.Used)
 			{
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Used word! Word:{0}", p_word);
+				this.DeactivateTOccupied();
+
+				// trigger effects
+				List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.ExistingWord };
+				ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
 			}
 			else
 			{
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Invalid word! Word:{0}", p_word);
+				this.DeactivateTOccupied();
+
+				// trigger effects
+				List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.InvalidWord };
+				ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
 			}
+		}
+
+		private void DeactivateTOccupied ()
+		{
+			List<Tile> tOccupiedTiles = m_tiles.FindAll(TOCCUPIED);
+			Rack rack = Model.Instance.Rack;
+
+			foreach (Tile tile in tOccupiedTiles)
+			{
+				rack.AddLetter(tile.TileModel.Letter);
+			}
+
+			this.EnableNeighbors();
+			this.EnablePassButton();
 		}
 	}
 }

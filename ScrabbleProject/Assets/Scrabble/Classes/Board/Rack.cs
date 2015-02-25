@@ -119,6 +119,13 @@ namespace Board
 
 		private void AdjustPosition ()
 		{
+			// update local position first
+			Vector3 localPos = m_letter.transform.position;;
+			for (int i = 0; i < m_letterViews.Count; i++)
+			{
+				m_letterViews[i].transform.localPosition = localPos;
+			}
+
 			// fixe init pos
 			for (int i = 0; i < m_letterViews.Count; i++)
 			{
@@ -168,20 +175,23 @@ namespace Board
 
 					// remove the letter from rack
 					this.RemoveLetter(eletter);
+
+					this.AdjustPosition();
 				}
 				break;
 
 				case EEvents.OnPressedPass:
 				{
 					// test clear letters
+					/*
 					while (m_letters.Count > 0)
 					{
 						Letter letter = m_letterViews[0];
 						this.RemoveLetter(m_letters[0]);
 						GameObject.Destroy(letter.gameObject);
 					}
+					*/
 					
-					/*
 					int limit = (RACK_LIMIT - m_letters.Count);
 					this.Log(Tags.Log, "Rack::OnEventListened OnPressedPass limit:{0}", limit);
 					
@@ -192,16 +202,17 @@ namespace Board
 							this.CreateLetter(Letters.Instance.Letter());
 						}
 					}
-					*/
-
-					// debug word
+					
+					/*
+					// Debug 7 letter word
 					this.CreateLetter(ELetter.B);
+					this.CreateLetter(ELetter.U);
+					this.CreateLetter(ELetter.B);
+					this.CreateLetter(ELetter.B);
+					this.CreateLetter(ELetter.L);
 					this.CreateLetter(ELetter.E);
-					this.CreateLetter(ELetter.E);
-					this.CreateLetter(ELetter.I);
 					this.CreateLetter(ELetter.S);
-					this.CreateLetter(ELetter.D);
-					this.CreateLetter(ELetter.T);
+					*/
 				}
 				break;
 			}

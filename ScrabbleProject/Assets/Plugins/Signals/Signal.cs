@@ -29,7 +29,7 @@ public class Signal
 			if (target != null && !string.IsNullOrEmpty(method))
 			{
 				//if (argType.Equals(value.GetType().FullName))
-				// +AS:02222015 Added support on namespaces
+				// 02222015 Added support on namespaces
 				if (value.GetType().FullName.Contains(argType))
 					target.SendMessage(method, value, SendMessageOptions.RequireReceiver);
 				else

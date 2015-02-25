@@ -56,6 +56,14 @@ namespace Events
 		/// 	- List<tile>
 		/// </summary>
 		OnPOccupiedTiles = 0x1 << 5,
+
+		// Enable/Disable of PASS button
+		OnPassDisabled = 0x1 << 6,
+		OnPassEnabled = 0x1 << 7,
+
+		// Effects: Positive & Negative
+		OnShowPositiveEffects = 0x1 << 8,
+		OnShowNegativeEffects = 0x1 << 9,
 	}; 
 
 	public class ScrabbleEvent

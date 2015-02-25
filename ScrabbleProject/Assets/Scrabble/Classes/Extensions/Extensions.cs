@@ -233,17 +233,17 @@ namespace Ext
 			return clone;
 		}
 
-		public static void Shuffle<T> (this IList<T> list)  
+		public static void Shuffle<T> (this IList<T> p_self)  
 		{  
-			System.Random rng = new System.Random();  
-			int n = list.Count;  
+			System.Random ran = new System.Random();  
+			int n = p_self.Count;  
 			while (n > 1) 
 			{  
 				n--;  
-				int k = rng.Next(n + 1);  
-				T value = list[k];  
-				list[k] = list[n];  
-				list[n] = value;  
+				int k = ran.Next(n + 1);  
+				T value = p_self[k];  
+				p_self[k] = p_self[n];  
+				p_self[n] = value;  
 			}  
 		}
 		#endregion
