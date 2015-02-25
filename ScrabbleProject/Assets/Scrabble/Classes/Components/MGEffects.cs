@@ -102,7 +102,7 @@ namespace MGTools
 			foreach (EScrabbleEffects effect in p_effects)
 			{
 				this.StartCoroutine(this.ShowPositive(effect));
-				yield return new WaitForSeconds(1.25f);
+				yield return new WaitForSeconds(1.50f);
 			}
 
 			yield break;
@@ -116,7 +116,7 @@ namespace MGTools
 			//iTween.FadeTo(effects.gameObject, 1f, 0.25f);
 			iTween.MoveFrom(effects, m_moveFrom, 0.25f);
 			
-			yield return new WaitForSeconds(0.75f);
+			yield return new WaitForSeconds(1.15f);
 			//iTween.FadeTo(effects.gameObject, 0f, 0.25f);
 			iTween.MoveTo(effects, m_moveTo, 0.25f);
 			
