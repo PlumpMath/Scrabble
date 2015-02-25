@@ -119,6 +119,13 @@ namespace Board
 
 		private void AdjustPosition ()
 		{
+			// update local position first
+			Vector3 localPos = m_letter.transform.position;;
+			for (int i = 0; i < m_letterViews.Count; i++)
+			{
+				m_letterViews[i].transform.localPosition = localPos;
+			}
+
 			// fixe init pos
 			for (int i = 0; i < m_letterViews.Count; i++)
 			{
@@ -168,6 +175,8 @@ namespace Board
 
 					// remove the letter from rack
 					this.RemoveLetter(eletter);
+
+					this.AdjustPosition();
 				}
 				break;
 
