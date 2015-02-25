@@ -58,7 +58,7 @@ public class SignalDrawer : PropertyDrawer
 						{
 							//if (parameters.Length == 1 && parameters[0].ParameterType.FullName.Equals(argType))
 							//	addMethod = true;
-							// +AS:02222015 Add support on NameSpaces
+							// 02222015 Add support on NameSpaces
 							string param = parameters[0].ParameterType.FullName;
 							if (parameters.Length == 1 && param.Contains(argType))
 							{
@@ -66,7 +66,7 @@ public class SignalDrawer : PropertyDrawer
 							}
 						}
 					
-						// +AS:02222015 Debug logs
+						// 02222015 Debug logs
 						/*
 						if (parameters.Length == 1)
 						{

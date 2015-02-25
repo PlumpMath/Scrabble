@@ -124,7 +124,7 @@ namespace Board
 					foreach (Tile tile in activeTiles)
 					{
 						//bool contains = tile.Rect.Contains(newPos);
-						// +AS:02222015 Note: For some reason, min and size has the correct values. so we used them instead.
+						// 02222015 Note: For some reason, min and size has the correct values. so we used them instead.
 						Rect rect = tile.Rect;
 						bool contains = rect.min.x <= newPos.x &&
 										rect.min.y <= newPos.y &&
@@ -153,6 +153,9 @@ namespace Board
 								// TODO: Trigger active neighbor tiles!
 								this.EnableNeighbors();
 
+								// disable pass button
+								this.DisablePassButton();
+
 								break;
 							}
 						}
@@ -170,6 +173,7 @@ namespace Board
 						}
 
 						this.EnableNeighbors();
+						this.EnablePassButton();
 					}
 				}
 				break;
@@ -198,7 +202,12 @@ namespace Board
 			{
 				case EButton.Pass:
 				{
-					ScrabbleEvent.Instance.Trigger(EEvents.OnPressedPass, null);
+					List<Tile> tOccupiedTiles = m_tiles.FindAll(TOCCUPIED);
+
+					if (tOccupiedTiles.Count <= 0)
+					{
+						ScrabbleEvent.Instance.Trigger(EEvents.OnPressedPass, null);
+					}
 				}
 				break;
 
@@ -244,10 +253,26 @@ namespace Board
 					else
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Single letter!");
+						this.DeactivateTOccupied();
 					}
 				}
 				break;
 			}
+		}
+
+		private void EnablePassButton ()
+		{
+			List<Tile> tOccupiedTiles = m_tiles.FindAll(TOCCUPIED);
+			
+			if (tOccupiedTiles.Count <= 0)
+			{
+				ScrabbleEvent.Instance.Trigger(EEvents.OnPassEnabled, null);
+			}
+		}
+
+		private void DisablePassButton ()
+		{
+			ScrabbleEvent.Instance.Trigger(EEvents.OnPassDisabled, null);
 		}
 
 		private void EnableNeighbors ()
@@ -262,7 +287,7 @@ namespace Board
 				this.EnableNeighbors(tile.TileModel.Row, tile.TileModel.Col, tile);
 			}
 		}
-
+		
 		/// <summary>
 		/// Flood fill (1x1 neighbor)
 		/// </summary>
@@ -551,8 +576,10 @@ namespace Board
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords VALID Word:{0} Score:{1}", p_word, totalWordPoints);
 				ScrabbleEvent.Instance.Trigger(EEvents.OnScoreComputed, new ScoreEvent(totalWordPoints, wordModifiers, isScrabble));
 
-				// Not trigger occupied tiles!
+				// trigger occupied tiles!
 				ScrabbleEvent.Instance.Trigger(EEvents.OnPOccupiedTiles, new OccupiedEvent(p_tiles));
+
+				this.EnablePassButton();
 			}
 			else if (isValid == WordStatus.Used)
 			{
@@ -577,6 +604,7 @@ namespace Board
 			}
 
 			this.EnableNeighbors();
+			this.EnablePassButton();
 		}
 	}
 }
