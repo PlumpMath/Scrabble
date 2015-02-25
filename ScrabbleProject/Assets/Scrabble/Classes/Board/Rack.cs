@@ -193,6 +193,17 @@ namespace Board
 							this.CreateLetter(Letters.Instance.Letter());
 						}
 					}
+					
+					/*
+					// Debug 7 letter word
+					this.CreateLetter(ELetter.B);
+					this.CreateLetter(ELetter.U);
+					this.CreateLetter(ELetter.B);
+					this.CreateLetter(ELetter.B);
+					this.CreateLetter(ELetter.L);
+					this.CreateLetter(ELetter.E);
+					this.CreateLetter(ELetter.S);
+					*/
 				}
 				break;
 			}

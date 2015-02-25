@@ -25,15 +25,6 @@ namespace MGTools
 
 	public class MGEffects : MonoBehaviour 
 	{
-		public static readonly string IMG_SB = "txt_scrabble";
-		public static readonly string IMG_TW = "txt_triple_word";
-		public static readonly string IMG_DW = "txt_double_word";
-		public static readonly string IMG_TL = "txt_triple_letter";
-		public static readonly string IMG_DL = "txt_double_letter";
-		public static readonly string IMG_NL = "txt_no_letters";
-		public static readonly string IMG_SL = "txt_single_letters";
-		public static readonly string IMG_IW = "txt_invalid_word";
-
 		public static readonly Dictionary<ETileType, EScrabbleEffects> EFFECTS = new Dictionary<ETileType, EScrabbleEffects>()
 		{
 			{ ETileType.TW, EScrabbleEffects.TripleWord },
@@ -51,6 +42,7 @@ namespace MGTools
 		[SerializeField] private tk2dSprite m_invalidWord;
 		[SerializeField] private tk2dSprite m_singleLetter;
 		[SerializeField] private tk2dSprite m_noLetters;
+		[SerializeField] private tk2dSprite m_existingWord;
 
 		private Dictionary<EScrabbleEffects, tk2dSprite> m_effects = new Dictionary<EScrabbleEffects, tk2dSprite>();
 		private Vector3 m_effectDefaultPos = new Vector3(-0.071638f, 0f, 0f);
@@ -67,6 +59,7 @@ namespace MGTools
 			m_effects.Add(EScrabbleEffects.InvalidWord, m_invalidWord);
 			m_effects.Add(EScrabbleEffects.SingleLetter, m_singleLetter);
 			m_effects.Add(EScrabbleEffects.NoLetters, m_noLetters);
+			m_effects.Add(EScrabbleEffects.ExistingWord, m_existingWord);
 
 			ScrabbleEvent.Instance.OnTriggerEvent += this.OnEventListened;
 		}
