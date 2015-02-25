@@ -549,7 +549,12 @@ namespace Board
 					if (wordModifiers.ContainsKey(tileType))
 					{
 						wordModifiers[tileType] = true;
-						effects.Add(MGEffects.EFFECTS[tileType]);
+
+						EScrabbleEffects eff = MGEffects.EFFECTS[tileType];
+						if (!effects.Contains(eff))
+						{
+							effects.Add(eff);
+						}
 					}
 
 					// contains word score multiplier
