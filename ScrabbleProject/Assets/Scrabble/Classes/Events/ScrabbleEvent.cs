@@ -60,6 +60,10 @@ namespace Events
 		// Enable/Disable of PASS button
 		OnPassDisabled = 0x1 << 6,
 		OnPassEnabled = 0x1 << 7,
+
+		// Effects: Positive & Negative
+		OnShowPositiveEffects = 0x1 << 8,
+		OnShowNegativeEffects = 0x1 << 9,
 	}; 
 
 	public class ScrabbleEvent
