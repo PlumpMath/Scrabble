@@ -20,6 +20,7 @@ namespace MGTools
 		InvalidWord,
 		SingleLetter,
 		NoLetters,
+		ExistingWord,
 	};
 
 	public class MGEffects : MonoBehaviour 
@@ -139,10 +140,10 @@ namespace MGTools
 			GameObject effects = m_effects[p_effect].gameObject;
 
 			effects.gameObject.SetActive(true);
-			iTween.FadeTo(effects.gameObject, 1f, 0.5f);
+			//iTween.FadeTo(effects.gameObject, 1f, 0.5f);
 
 			yield return new WaitForSeconds(1f);
-			iTween.FadeTo(effects.gameObject, 0f, 0.5f);
+			//iTween.FadeTo(effects.gameObject, 0f, 0.5f);
 
 			yield return new WaitForSeconds(0.5f);
 			effects.gameObject.SetActive(false);

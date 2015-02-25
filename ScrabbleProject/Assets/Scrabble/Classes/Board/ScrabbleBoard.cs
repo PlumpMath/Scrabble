@@ -224,6 +224,11 @@ namespace Board
 					if (occupiedC.Count <= 0 || occupiedR.Count <= 0)
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT No letters to check!");
+						
+						// trigger effects
+						List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.NoLetters };
+						ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
+
 						return;
 					}
 
@@ -254,6 +259,10 @@ namespace Board
 					{
 						this.Log(Tags.Log, "ScrabbleBoard::OnPressedButton SUBMIT Single letter!");
 						this.DeactivateTOccupied();
+
+						// trigger effects
+						List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.SingleLetter };
+						ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
 					}
 				}
 				break;
@@ -592,11 +601,19 @@ namespace Board
 			{
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Used word! Word:{0}", p_word);
 				this.DeactivateTOccupied();
+
+				// trigger effects
+				List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.ExistingWord };
+				ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
 			}
 			else
 			{
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Invalid word! Word:{0}", p_word);
 				this.DeactivateTOccupied();
+
+				// trigger effects
+				List<EScrabbleEffects> effects = new List<EScrabbleEffects>() { EScrabbleEffects.InvalidWord };
+				ScrabbleEvent.Instance.Trigger(EEvents.OnShowNegativeEffects, new EffectsEvent(effects));
 			}
 		}
 
