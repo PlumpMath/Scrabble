@@ -521,6 +521,8 @@ namespace Board
 			// calculate points
 			if (isValid == WordStatus.UnUsed)
 			{
+				List<EScrabbleEffects> effects = new List<EScrabbleEffects>();
+
 				for (int i = 0;  i < p_points.Count; i++)
 				{
 					ETileType tileType = p_tileTypes[i];
@@ -538,6 +540,7 @@ namespace Board
 					if (wordModifiers.ContainsKey(tileType))
 					{
 						wordModifiers[tileType] = true;
+						effects.Add(MGEffects.EFFECTS[tileType]);
 					}
 
 					// contains word score multiplier
@@ -571,6 +574,7 @@ namespace Board
 					this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Scrabble! +50 pts Word:{0} Score:{1} NewScore:{2}", p_word, totalWordPoints, totalWordPoints + 50);
 					totalWordPoints += 50;
 					isScrabble = true;
+					effects.Add(EScrabbleEffects.Scrabble);
 				}
 
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords VALID Word:{0} Score:{1}", p_word, totalWordPoints);
@@ -578,6 +582,9 @@ namespace Board
 
 				// trigger occupied tiles!
 				ScrabbleEvent.Instance.Trigger(EEvents.OnPOccupiedTiles, new OccupiedEvent(p_tiles));
+
+				// trigger effects
+				ScrabbleEvent.Instance.Trigger(EEvents.OnShowPositiveEffects, new EffectsEvent(effects));
 
 				this.EnablePassButton();
 			}

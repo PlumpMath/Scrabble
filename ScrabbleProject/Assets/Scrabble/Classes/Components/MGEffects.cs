@@ -8,6 +8,7 @@ namespace MGTools
 	using Board;
 	using Events;
 	using Ext;
+	using Model;
 
 	public enum EScrabbleEffects
 	{
@@ -31,6 +32,15 @@ namespace MGTools
 		public static readonly string IMG_NL = "txt_no_letters";
 		public static readonly string IMG_SL = "txt_single_letters";
 		public static readonly string IMG_IW = "txt_invalid_word";
+
+		public static readonly Dictionary<ETileType, EScrabbleEffects> EFFECTS = new Dictionary<ETileType, EScrabbleEffects>()
+		{
+			{ ETileType.TW, EScrabbleEffects.TripleWord },
+			{ ETileType.DW, EScrabbleEffects.DoubleWord },
+			{ ETileType.TL, EScrabbleEffects.TripleLetter },
+			{ ETileType.DL, EScrabbleEffects.DoubleWord },
+			{ ETileType.ST, EScrabbleEffects.DoubleWord },
+		};
 		
 		[SerializeField] private tk2dSprite m_scrabble;
 		[SerializeField] private tk2dSprite m_tripleWord;
@@ -42,6 +52,9 @@ namespace MGTools
 		[SerializeField] private tk2dSprite m_noLetters;
 
 		private Dictionary<EScrabbleEffects, tk2dSprite> m_effects = new Dictionary<EScrabbleEffects, tk2dSprite>();
+		private Vector3 m_effectDefaultPos = new Vector3(-0.071638f, 0f, 0f);
+		private Vector3 m_moveFrom = new Vector3(7.665298f, 0f, 0f);
+		private Vector3 m_moveTo = new Vector3(-7.665298f, 0f, 0f);
 
 		private void Awake ()
 		{
@@ -71,6 +84,8 @@ namespace MGTools
 					EffectsEvent evtEffects = (EffectsEvent)p_data;
 					List<EScrabbleEffects> effects = evtEffects.Data<List<EScrabbleEffects>>(EffectsEvent.EFFECTS);
 					effects.Sort(new SortEffects(Sort.Ascending));
+
+					this.StartCoroutine(this.ShowPositive(effects));
 				}
 				break;
 
@@ -79,22 +94,58 @@ namespace MGTools
 					EffectsEvent evtEffects = (EffectsEvent)p_data;
 					List<EScrabbleEffects> effects = evtEffects.Data<List<EScrabbleEffects>>(EffectsEvent.EFFECTS);
 					effects.Sort(new SortEffects(Sort.Ascending));
+					
+					this.StartCoroutine(this.ShowNegative(effects[0]));
 				}
 				break;
 			}
 		}
 
-		private void ShowPositive (List<EScrabbleEffects> p_effects)
+		private IEnumerator ShowPositive (List<EScrabbleEffects> p_effects)
 		{
+			yield return new WaitForSeconds(0.25f);
+
+			foreach (EScrabbleEffects effect in p_effects)
+			{
+				this.StartCoroutine(this.ShowPositive(effect));
+				yield return new WaitForSeconds(1.25f);
+			}
+
+			yield break;
 		}
 
 		private IEnumerator ShowPositive (EScrabbleEffects p_effect)
 		{
+			GameObject effects = m_effects[p_effect].gameObject;
+			
+			effects.gameObject.SetActive(true);
+			//iTween.FadeTo(effects.gameObject, 1f, 0.25f);
+			iTween.MoveFrom(effects, m_moveFrom, 0.25f);
+			
+			yield return new WaitForSeconds(0.75f);
+			//iTween.FadeTo(effects.gameObject, 0f, 0.25f);
+			iTween.MoveTo(effects, m_moveTo, 0.25f);
+			
+			yield return new WaitForSeconds(0.25f);
+
+			effects.transform.position = m_effectDefaultPos;
+			effects.SetActive(false);
+
 			yield break;
 		}
 
 		private IEnumerator ShowNegative (EScrabbleEffects p_effect)
 		{
+			GameObject effects = m_effects[p_effect].gameObject;
+
+			effects.gameObject.SetActive(true);
+			iTween.FadeTo(effects.gameObject, 1f, 0.5f);
+
+			yield return new WaitForSeconds(1f);
+			iTween.FadeTo(effects.gameObject, 0f, 0.5f);
+
+			yield return new WaitForSeconds(0.5f);
+			effects.gameObject.SetActive(false);
 			yield break;
 		}
 	}
