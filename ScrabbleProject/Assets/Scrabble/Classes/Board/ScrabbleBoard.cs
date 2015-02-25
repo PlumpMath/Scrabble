@@ -557,11 +557,26 @@ namespace Board
 			else if (isValid == WordStatus.Used)
 			{
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Used word! Word:{0}", p_word);
+				this.DeactivateTOccupied();
 			}
 			else
 			{
 				this.Log(Tags.Log, "ScrabbleBoard::ValidateWords Invalid word! Word:{0}", p_word);
+				this.DeactivateTOccupied();
 			}
+		}
+
+		private void DeactivateTOccupied ()
+		{
+			List<Tile> tOccupiedTiles = m_tiles.FindAll(TOCCUPIED);
+			Rack rack = Model.Instance.Rack;
+
+			foreach (Tile tile in tOccupiedTiles)
+			{
+				rack.AddLetter(tile.TileModel.Letter);
+			}
+
+			this.EnableNeighbors();
 		}
 	}
 }
