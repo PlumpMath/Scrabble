@@ -48,8 +48,8 @@ namespace Board
 			this.CreateLetter(ELetter.B);
 			*/
 
-			// Debug 7 letter word
 			/*
+			// Debug 7 letter word
 			this.CreateLetter(ELetter.B);
 			this.CreateLetter(ELetter.U);
 			this.CreateLetter(ELetter.B);
