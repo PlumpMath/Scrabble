@@ -296,7 +296,9 @@ namespace Model
 			{ ELetter.Z, 			1 },
 			
 			// 0 pt
-			{ ELetter.Blank, 		2 },
+			//{ ELetter.Blank, 		2 },
+			// +AS:02262015 Temp remove Blank, sleepy D:
+			{ ELetter.Blank, 		0 },
 		};
 
 		private static Dictionary<ETileType, int> m_tileCount = new Dictionary<ETileType, int>()
