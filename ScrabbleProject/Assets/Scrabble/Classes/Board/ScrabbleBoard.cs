@@ -517,6 +517,7 @@ namespace Board
 			Dictionary<ETileType, int> twdlCount = new Dictionary<ETileType, int>();
 			twdlCount.Add(ETileType.DW, 0);
 			twdlCount.Add(ETileType.TW, 0);
+			twdlCount.Add(ETileType.ST, 0);
 
 			bool isScrabble = false;
 			Dictionary<ETileType, bool> wordModifiers = new Dictionary<ETileType, bool>()
