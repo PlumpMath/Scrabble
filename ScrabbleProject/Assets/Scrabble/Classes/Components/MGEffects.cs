@@ -30,7 +30,7 @@ namespace MGTools
 			{ ETileType.TW, EScrabbleEffects.TripleWord },
 			{ ETileType.DW, EScrabbleEffects.DoubleWord },
 			{ ETileType.TL, EScrabbleEffects.TripleLetter },
-			{ ETileType.DL, EScrabbleEffects.DoubleWord },
+			{ ETileType.DL, EScrabbleEffects.DoubleLetter },
 			{ ETileType.ST, EScrabbleEffects.DoubleWord },
 		};
 		

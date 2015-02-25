@@ -526,6 +526,7 @@ namespace Board
 				{ ETileType.TL, false },
 				{ ETileType.DW, false },
 				{ ETileType.TW, false },
+				{ ETileType.ST, false },
 			};
 
 			// calculate points
